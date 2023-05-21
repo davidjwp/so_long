@@ -1,0 +1,6 @@
+break main
+break mlx_init
+break mlx_new_window
+break mlx_loop_hook
+break mlx_key_hook
+break mlx_loop
