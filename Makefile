@@ -21,7 +21,7 @@ INCLUDE		= -I ./minilibx-linux
 DEBUG		= tdebug
 
 DEBUG_SRCS	= minilibx-linux/mlx_init.c minilibx-linux/mlx_loop.c minilibx-linux/mlx_loop_hook.c \
-			minilibx-linux/mlx_new_window.c minilibx-linux/mlx_key_hook.c 
+			minilibx-linux/mlx_new_window.c minilibx-linux/mlx_key_hook.c minilibx-linux/mlx_destroy_window.c 
 
 DEBUG_OBJS	= $(DEBUG_SRCS:.c=.o)
 
