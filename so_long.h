@@ -31,6 +31,15 @@
 #define	IMG_WIDTH WIN_WIDTH
 #define IMG_HEIGHT WIN_HEIGHT
 
+typedef struct	s_xpm {
+	void	*img;
+	int	fd;
+	int	*width;
+	int	*height;
+	int	x;
+	int	y;
+}			t_xpm;
+
 typedef struct	s_map {
 	char	*name;
 	int 	fd;
@@ -59,6 +68,7 @@ typedef struct	s_xdata {
 	void	*mlx_ptr;
 	void	*win_ptr;
 	t_img	img;
+	t_xpm	xpm;
 	t_pos	position;
 	t_map	map;
 }				t_xdata;
@@ -76,7 +86,8 @@ int	get_height(char *str);
 int	get_width(char *str);
 int	ft_strlen(char *str);
 char	**ft_split(char const *s, char c);
-void	free_all_split(char **var);
+void	free_split(char **var);
 int	map_parse(t_xdata *data, t_map *MapCheck, char *file);
+int	gnl(int fd, char **str);
 
 #endif

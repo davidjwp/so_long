@@ -12,7 +12,7 @@
 
 #include "../so_long.h"
 
-void	free_all_split(char **var)
+void	free_split(char **var)
 {
 	int i;
 
@@ -22,11 +22,25 @@ void	free_all_split(char **var)
 	free(var);
 }
 
-int	gnl(char *str)
+int	gnl(int fd, char **str)
 {
-	char	buf;
+	char	*buf;
+	char	c;
+	int	n;
+	int	i;
 
-	while (read())
-
-
+	i = 0;
+	buf = malloc(sizeof(char) * BUFSIZ);
+	n = read(fd, &c, 1);
+	while (n && c != 0)
+	{
+		n = read(fd, &c, 1);
+		if (n != 0)
+			buf[i] = c;
+		i++;
+	}
+	buf[i] = 0;
+	buf[BUFSIZ] = 0;
+	*str = buf;
+	return (1);
 }

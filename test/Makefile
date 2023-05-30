@@ -6,7 +6,7 @@
 #    By: djacobs <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/16 10:20:11 by djacobs           #+#    #+#              #
-#    Updated: 2023/05/29 16:34:36 by djacobs          ###   ########.fr        #
+#    Updated: 2023/05/30 08:35:57 by djacobs          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ DEBUG_SRCS	= minilibx-linux/mlx_init.c minilibx-linux/mlx_loop.c minilibx-linux/
 
 DEBUG_OBJS	= $(DEBUG_SRCS:.c=.o)
 
-NAME		= testing
+NAME		= test
 
 LIBX		= -lm -lX11 -lXext -lmlx
 

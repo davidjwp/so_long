@@ -20,8 +20,13 @@ int	get_height(char *str)
 	i = 0;
 	height = 0;
 	while (str[i] != 0)
-		if (str[i++] == '\n')
+	{
+		if (str[i] == '\n')
 			height++;
+		i++;
+		if (!str[i])
+			height++;
+	}
 	return (height);
 }
 
@@ -30,8 +35,9 @@ int	get_width(char *str)
 	int	width;
 
 	width = 0;
-	while (str[i] != '\n')
+	while (str[width] != '\n')
 		width++;
+	width++;
 	return (width);
 }
 

@@ -172,6 +172,7 @@ int	main(void)
 	mlx_loop_hook(mlx.mlx_ptr, &render, &mlx);
 	mlx_hook(mlx.win_ptr, DestroyNotify, 0L, &close_my_window, &mlx);
 	mlx_hook(mlx.win_ptr, KeyPress, KeyPressMask, &controls, &mlx);
+	// mlx_hook(mlx.win_ptr, KeyPress, KeyPressMask, &controls, &mlx);
 	// mlx_hook(mlx.win_ptr, KeyRelease, KeyReleaseMask, &PrintKey, &mlx);
 
 	/*loop*/

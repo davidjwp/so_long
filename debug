@@ -1,0 +1,3 @@
+break map_path
+break map.c:102
+break map_walls

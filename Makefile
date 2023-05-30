@@ -22,7 +22,7 @@ NAME		= so_long
 
 LIBX		= -lm -lX11 -lXext -lmlx
 
-SRCS		= utils/get_len.c utils/ft_split.c test.c
+SRCS		= map.c utils/utils.c utils/get_len.c utils/ft_split.c so_long.c
 
 HEADER		= so_long.h
 

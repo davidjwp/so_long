@@ -86,6 +86,7 @@ int close_my_window(t_xdata *mlx)
 	return (0);
 }
 
+//doesn't work great 
 int	controls(int keysym, t_xdata *mlx)
 {
 	if (keysym == XK_w && mlx->position.y >= 1)
@@ -128,9 +129,9 @@ int	main(int argc, char **argv)
 {
 	t_xdata	mlx;
 
-	if (argc == 2)
+	if (argc != 2)
 		return (perror("Error map"), 0);
-	map_parse(&mlx, &(t_map){0, 0, 0, 0, {0, 0, 0, 0}, 0, 0}, argv[1]);
+	map_parse(&mlx, &(t_map){argv[1], 0, 0, 0, 0, {0, 0, 0, 0}, 0, 0}, argv[1]);
 	/*initialize mlx*/
 	mlx.mlx_ptr = mlx_init();
 	if (mlx.mlx_ptr == NULL)
@@ -147,6 +148,7 @@ int	main(int argc, char **argv)
 	/*create new image and get address data and get data for bpp, line_len and endian*/
 	mlx.img.image = mlx_new_image(mlx.mlx_ptr, IMG_WIDTH, IMG_HEIGHT);
 	mlx.img.addr = mlx_get_data_addr(mlx.img.image, &mlx.img.bpp, &mlx.img.line_len, &mlx.img.endian);
+	// mlx.xpm.img = (mlx.win_ptr, "untitled.xpm", mlx.xpm.width, mlx.xpm.height);
 
 	/*using mlx hook for different keypress*/
 	mlx_loop_hook(mlx.mlx_ptr, &render, &mlx);

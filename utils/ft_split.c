@@ -25,7 +25,7 @@ static char	*ft_word_cpy(char const *s, char c)
 	word_cpy = (char *)malloc(word_len + 1);
 	while (index < word_len)
 	{
-		word_cpy[index] = *s++;
+		word_cpy[index] = s[index];
 		index++;
 	}
 	word_cpy[index] = '\0';
