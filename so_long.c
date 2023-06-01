@@ -111,13 +111,19 @@ int	print_hello(t_xdata *data)
 
 int	render(t_xdata *mlx)
 {
+	void	*xpm;
+	int	width;
+	int	height;
+
 	if (mlx->win_ptr == NULL)
 		return (0);	
 	draw_background(&mlx->img);
+	xpm = mlx_xpm_file_to_image(mlx->mlx_ptr, "Untitled.xpm", &width, &height);
 	draw_rect(&mlx->img, (t_rect){mlx->position.x, mlx->position.y,100,100,GREEN});
 	// draw_rect(&mlx->img, (t_rect){0,0,100,100,RED});
 
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.image, 0,0);
+	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, xpm, 0, 0);
 	return (0);
 }
 /*don't forget to have the function for the hook be a pointer else it will mess up and segfault*/
@@ -130,8 +136,10 @@ int	main(int argc, char **argv)
 	t_xdata	mlx;
 
 	if (argc != 2)
-		return (perror("Error map"), 0);
-	map_parse(&mlx, &(t_map){argv[1], 0, 0, 0, 0, {0, 0, 0, 0}, 0, 0}, argv[1]);
+		return (0);
+	if (!map_parse(&mlx, &(t_map){argv[1], 0, 0, 0, 0, {0, 0, 0, 0}, 0, 0},\
+	argv[1]))
+		return (0);
 	/*initialize mlx*/
 	mlx.mlx_ptr = mlx_init();
 	if (mlx.mlx_ptr == NULL)
@@ -146,9 +154,8 @@ int	main(int argc, char **argv)
 		return (perror("Error new window"), 0);
 	}
 	/*create new image and get address data and get data for bpp, line_len and endian*/
-	mlx.img.image = mlx_new_image(mlx.mlx_ptr, IMG_WIDTH, IMG_HEIGHT);
-	mlx.img.addr = mlx_get_data_addr(mlx.img.image, &mlx.img.bpp, &mlx.img.line_len, &mlx.img.endian);
-	// mlx.xpm.img = (mlx.win_ptr, "untitled.xpm", mlx.xpm.width, mlx.xpm.height);
+	mlx.Ximg->background = mlx_new_image(mlx.mlx_ptr, IMG_WIDTH, IMG_HEIGHT);
+	mlx.Ximg->background.addr = mlx_get_data_addr(mlx.img.image, &mlx.img.bpp, &mlx.img.line_len, &mlx.img.endian);
 
 	/*using mlx hook for different keypress*/
 	mlx_loop_hook(mlx.mlx_ptr, &render, &mlx);
@@ -157,7 +164,10 @@ int	main(int argc, char **argv)
 	// mlx_hook(mlx.win_ptr, KeyRelease, KeyReleaseMask, &PrintKey, &mlx);
 
 	/*loop*/
+	mlx.position.x = 0;
+	mlx.position.y = 0;
 	mlx_loop(mlx.mlx_ptr);
+	/*destroy image and display to avoid leaks*/
 	mlx_destroy_image(mlx.mlx_ptr, mlx.img.image);
 	mlx_destroy_display(mlx.mlx_ptr);
 	free(mlx.mlx_ptr);

@@ -1,3 +1,2 @@
-break map_path
-break map.c:102
+break map_parse
 break map_walls

@@ -71,6 +71,6 @@ char	**ft_split(char const *s, char c)
 		while (*s != c && *s)
 			s++;
 	}
-	split[index] = NULL;
+	split[index - 1] = NULL;
 	return (split);
 }

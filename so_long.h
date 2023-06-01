@@ -31,15 +31,7 @@
 #define	IMG_WIDTH WIN_WIDTH
 #define IMG_HEIGHT WIN_HEIGHT
 
-typedef struct	s_xpm {
-	void	*img;
-	int	fd;
-	int	*width;
-	int	*height;
-	int	x;
-	int	y;
-}			t_xpm;
-
+//maybe you could turn each character, item and exit into position structure IF you need it fast later idk
 typedef struct	s_map {
 	char	*name;
 	int 	fd;
@@ -59,6 +51,14 @@ typedef struct	s_img {
 	int		endian;
 }				t_img;
 
+typedef struct	s_Ximg {
+	t_img	background;
+	t_img	wall;
+	t_img	character;
+	t_img	exit;
+	t_img	item;
+}				t_Ximg
+
 typedef struct s_pos{
 	int x;
 	int y;
@@ -67,12 +67,10 @@ typedef struct s_pos{
 typedef struct	s_xdata {
 	void	*mlx_ptr;
 	void	*win_ptr;
-	t_img	img;
-	t_xpm	xpm;
+	t_Ximg	*Ximg;
 	t_pos	position;
 	t_map	map;
 }				t_xdata;
-
 
 typedef struct s_rect{
 	t_pos position;

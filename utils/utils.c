@@ -14,11 +14,14 @@
 
 void	free_split(char **var)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (var[i] != NULL)
+	{
 		free(var[i]);
+		i++;
+	}
 	free(var);
 }
 
@@ -26,21 +29,27 @@ int	gnl(int fd, char **str)
 {
 	char	*buf;
 	char	c;
-	int	n;
-	int	i;
+	int		n;
+	int		i;
 
 	i = 0;
 	buf = malloc(sizeof(char) * BUFSIZ);
 	n = read(fd, &c, 1);
+	if (c == '\n')
+		return (free(buf), *str == NULL);
+	if (n)
+		buf[i++] = c;
 	while (n && c != 0)
 	{
 		n = read(fd, &c, 1);
+		if (c == '\n' && buf[i - 2] == '\n')
+			break;
 		if (n != 0)
 			buf[i] = c;
 		i++;
 	}
-	buf[i] = 0;
-	buf[BUFSIZ] = 0;
+	buf[i - 1] = 0;
+	buf[BUFSIZ - 1] = 0;
 	*str = buf;
 	return (1);
 }
