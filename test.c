@@ -124,9 +124,9 @@ int	main(int argc, char **argv)
 {
 	t_xdata	mlx;
 
-	if (argc == 2)
-		return (perror("Error map"), 0);
-	map_parse(&mlx, &(t_map){0, 0, 0, 0, {0, 0, 0, 0}, 0, 0}, argv[1]);
+	// if (argc != 2)
+	// 	return (perror("Error map"), 0);
+	// map_parse(&mlx, &(t_map){0, 0, 0, 0, {0, 0, 0, 0}, 0, 0}, argv[1]);
 	/*initialize mlx*/
 	mlx.mlx_ptr = mlx_init();
 	if (mlx.mlx_ptr == NULL)
@@ -141,19 +141,19 @@ int	main(int argc, char **argv)
 		return (perror("Error new window"), 0);
 	}
 	/*create new image and get address data and get data for bpp, line_len and endian*/
-	mlx.img.image = mlx_new_image(mlx.mlx_ptr, IMG_WIDTH, IMG_HEIGHT);
-	mlx.img.addr = mlx_get_data_addr(mlx.img.image, &mlx.img.bpp, &mlx.img.line_len, &mlx.img.endian);
+	// mlx.img.image = mlx_new_image(mlx.mlx_ptr, IMG_WIDTH, IMG_HEIGHT);
+	// mlx.img.addr = mlx_get_data_addr(mlx.img.image, &mlx.img.bpp, &mlx.img.line_len, &mlx.img.endian);
 
-	/*using mlx hook for different keypress*/
-	mlx_loop_hook(mlx.mlx_ptr, &render, &mlx);
-	mlx_hook(mlx.win_ptr, DestroyNotify, 0L, &close_my_window, &mlx);
-	mlx_hook(mlx.win_ptr, KeyRelease, KeyReleaseMask, &controls, &mlx);
-	// mlx_hook(mlx.win_ptr, KeyRelease, KeyReleaseMask, &PrintKey, &mlx);
+	// /*using mlx hook for different keypress*/
+	// mlx_loop_hook(mlx.mlx_ptr, &render, &mlx);
+	// mlx_hook(mlx.win_ptr, DestroyNotify, 0L, &close_my_window, &mlx);
+	// mlx_hook(mlx.win_ptr, KeyRelease, KeyReleaseMask, &controls, &mlx);
+	// // mlx_hook(mlx.win_ptr, KeyRelease, KeyReleaseMask, &PrintKey, &mlx);
 
-	/*loop*/
-	mlx_loop(mlx.mlx_ptr);
-	mlx_destroy_image(mlx.mlx_ptr, mlx.img.image);
-	mlx_destroy_display(mlx.mlx_ptr);
-	free(mlx.mlx_ptr);
+	// /*loop*/
+	// mlx_loop(mlx.mlx_ptr);
+	// mlx_destroy_image(mlx.mlx_ptr, mlx.img.image);
+	// mlx_destroy_display(mlx.mlx_ptr);
+	// free(mlx.mlx_ptr);
 	return (0);
 }

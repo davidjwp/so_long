@@ -23,60 +23,60 @@ int	PrintKey(int keysym)
 	return (0);
 }
 
-void	img_pix_put(t_img *img, int x, int y, int color)
-{
-	char    *pixel;
-	int		i;
+// void	img_pix_put(t_img *img, int x, int y, int color)
+// {
+// 	char    *pixel;
+// 	int		i;
 
-	i = img->bpp - 8;
-    pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
-	while (i >= 0)
-	{
-		/* big endian, MSB is the leftmost bit */
-		if (img->endian != 0)
-			*pixel++ = (color >> i) & 0xFF;
-		/* little endian, LSB is the leftmost bit */
-		else
-			*pixel++ = (color >> (img->bpp - 8 - i)) & 0xFF;
-		i -= 8;
-	}
-}
+// 	i = img->bpp - 8;
+//     pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
+// 	while (i >= 0)
+// 	{
+// 		/* big endian, MSB is the leftmost bit */
+// 		if (img->endian != 0)
+// 			*pixel++ = (color >> i) & 0xFF;
+// 		/* little endian, LSB is the leftmost bit */
+// 		else
+// 			*pixel++ = (color >> (img->bpp - 8 - i)) & 0xFF;
+// 		i -= 8;
+// 	}
+// }
 
-void	img_pxl_put(t_img *img, int x, int y, int color)
-{
-	char	*pixel;
+// void	img_pxl_put(t_img *img, int x, int y, int color)
+// {
+// 	char	*pixel;
 
-	pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
-	*(int *)pixel = color;
-}
+// 	pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
+// 	*(int *)pixel = color;
+// }
 
-void	draw_rect(t_img *img, t_rect rect)
-{
-	int	i = rect.position.y;
-	int	j;
+// void	draw_rect(t_img *img, t_rect rect)
+// {
+// 	int	i = rect.position.y;
+// 	int	j;
 
-	while (i < rect.position.y + rect.height)
-	{
-		j = rect.position.x;
-		while (j < rect.position.x + rect.width)
-			img_pxl_put(img, j++, i, rect.color);
-		i++;
-	}
-}
+// 	while (i < rect.position.y + rect.height)
+// 	{
+// 		j = rect.position.x;
+// 		while (j < rect.position.x + rect.width)
+// 			img_pxl_put(img, j++, i, rect.color);
+// 		i++;
+// 	}
+// }
 
-void	draw_background(t_img *img)
-{
-	int	i = 0;
-	int j;
+// void	draw_background(t_img *img)
+// {
+// 	int	i = 0;
+// 	int j;
 
-	while (i < WIN_HEIGHT)
-	{
-		j = 0;
-		while (j < WIN_WIDTH)
-			img_pxl_put(img, j++, i, WHITE);
-		i++;
-	}
-}
+// 	while (i < WIN_HEIGHT)
+// 	{
+// 		j = 0;
+// 		while (j < WIN_WIDTH)
+// 			img_pxl_put(img, j++, i, WHITE);
+// 		i++;
+// 	}
+// }
 
 int close_my_window(t_xdata *mlx)
 {
@@ -109,23 +109,23 @@ int	print_hello(t_xdata *data)
 	return (0);
 }
 
-int	render(t_xdata *mlx)
-{
-	void	*xpm;
-	int	width;
-	int	height;
+// int	render(t_xdata *mlx)
+// {
+// 	void	*xpm;
+// 	int	width;
+// 	int	height;
 
-	if (mlx->win_ptr == NULL)
-		return (0);	
-	draw_background(&mlx->img);
-	xpm = mlx_xpm_file_to_image(mlx->mlx_ptr, "Untitled.xpm", &width, &height);
-	draw_rect(&mlx->img, (t_rect){mlx->position.x, mlx->position.y,100,100,GREEN});
-	// draw_rect(&mlx->img, (t_rect){0,0,100,100,RED});
+// 	if (mlx->win_ptr == NULL)
+// 		return (0);	
+// 	draw_background(&mlx->img);
+// 	xpm = mlx_xpm_file_to_image(mlx->mlx_ptr, "Untitled.xpm", &width, &height);
+// 	draw_rect(&mlx->img, (t_rect){mlx->position.x, mlx->position.y,100,100,GREEN});
+// 	// draw_rect(&mlx->img, (t_rect){0,0,100,100,RED});
 
-	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.image, 0,0);
-	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, xpm, 0, 0);
-	return (0);
-}
+// 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.image, 0,0);
+// 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, xpm, 0, 0);
+// 	return (0);
+// }
 /*don't forget to have the function for the hook be a pointer else it will mess up and segfault*/
 /*make sure to draw the images IN the window so pay attention to the values given*/
 
@@ -133,43 +133,44 @@ int	render(t_xdata *mlx)
 
 int	main(int argc, char **argv)	
 {
-	t_xdata	mlx;
+	t_xdata	data;
 
 	if (argc != 2)
 		return (0);
-	if (!map_parse(&mlx, &(t_map){argv[1], 0, 0, 0, 0, {0, 0, 0, 0}, 0, 0},\
+	if (!map_parse(&data, &(t_map){argv[1], 0, 0, 0, 0, {0, 0, 0, 0}, 0, 0},\
 	argv[1]))
 		return (0);
 	/*initialize mlx*/
-	mlx.mlx_ptr = mlx_init();
-	if (mlx.mlx_ptr == NULL)
+	data.mlx_ptr = mlx_init();
+	if (data.mlx_ptr == NULL)
 		return (perror("Error mlx_init failed"), 0);
 
 
 	/*create new window*/
-	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "new_window");
-	if (mlx.win_ptr == NULL)
+	data.win_ptr = mlx_new_window(data.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "new_window");
+	if (data.win_ptr == NULL)
 	{
-		free(mlx.win_ptr);
+		free(data.win_ptr);
 		return (perror("Error new window"), 0);
 	}
+
 	/*create new image and get address data and get data for bpp, line_len and endian*/
-	mlx.Ximg->background = mlx_new_image(mlx.mlx_ptr, IMG_WIDTH, IMG_HEIGHT);
-	mlx.Ximg->background.addr = mlx_get_data_addr(mlx.img.image, &mlx.img.bpp, &mlx.img.line_len, &mlx.img.endian);
+	// mlx.Ximg->background = mlx_new_image(mlx.mlx_ptr, IMG_WIDTH, IMG_HEIGHT);
+	// mlx.Ximg->background.addr = mlx_get_data_addr(mlx.img.image, &mlx.img.bpp, &mlx.img.line_len, &mlx.img.endian);
 
 	/*using mlx hook for different keypress*/
-	mlx_loop_hook(mlx.mlx_ptr, &render, &mlx);
-	mlx_hook(mlx.win_ptr, DestroyNotify, 0L, &close_my_window, &mlx);
-	mlx_hook(mlx.win_ptr, KeyRelease, KeyReleaseMask, &controls, &mlx);
+	// mlx_loop_hook(mlx.mlx_ptr, &render, &mlx);
+	mlx_hook(data.win_ptr, DestroyNotify, 0L, &close_my_window, &data);
+	mlx_hook(data.win_ptr, KeyRelease, KeyReleaseMask, &controls, &data);
 	// mlx_hook(mlx.win_ptr, KeyRelease, KeyReleaseMask, &PrintKey, &mlx);
 
 	/*loop*/
-	mlx.position.x = 0;
-	mlx.position.y = 0;
-	mlx_loop(mlx.mlx_ptr);
+	data.position.x = 0;
+	data.position.y = 0;
+	mlx_loop(data.mlx_ptr);
 	/*destroy image and display to avoid leaks*/
-	mlx_destroy_image(mlx.mlx_ptr, mlx.img.image);
-	mlx_destroy_display(mlx.mlx_ptr);
-	free(mlx.mlx_ptr);
+	// mlx_destroy_image(mlx.mlx_ptr, mlx.Ximg.image);
+	mlx_destroy_display(data.mlx_ptr);
+	free(data.mlx_ptr);
 	return (0);
 }

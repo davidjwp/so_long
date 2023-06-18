@@ -12,6 +12,8 @@
 
 #include "so_long.h"
 
+/*you should also check for the proper file extension  */
+
 /*
 ** filters the map to only look for a couple characters
 */
@@ -75,9 +77,8 @@ int	map_walls(t_map *MapVar, char **map, int y, int x)
 			x++;
 		}
 		if ((wall != MapVar->width && (y == 0 || y == MapVar->height)) ||\
-		((wall != (MapVar->height - 2) * 2) && y == MapVar->height - 2) ||\
 		(x != MapVar->width || (map[y][x] != '1' && map[y][0] != '1')))
-			return (perror ("Error wrong wall size"), 0);
+			return (perror ("Error bad walls"), 0);
 		x = 0;
 		y++;
 	}
@@ -124,6 +125,8 @@ int	map_parse(t_xdata *data, t_map *MapCheck, char *file)
 	char	**map_split;
 	char	*map;
 
+	if (!ber_file(MapCheck->map, ".ber"))
+		return (perror("Error wrong file type"), 0);
 	data->map = *MapCheck;
 	data->map.fd = open( file, 0);
 	if (data->map.fd < 0)
@@ -136,6 +139,6 @@ int	map_parse(t_xdata *data, t_map *MapCheck, char *file)
 	map_split = ft_split(map, '\n');
 	if (!map_path(map_split, (t_pos){0, 0}))
 		return(free(map), free_split(map_split), close(data->map.fd), 0);
-	data->map = map;
+	data->map.map = map;
 	return (free_split(map_split), close(data->map.fd), 1);
 }

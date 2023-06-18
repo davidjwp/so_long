@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #ifndef	SO_LONG_H
 # define SO_LONG_H
 
@@ -26,14 +25,15 @@
 #define RED 0XFF0000
 #define GREEN 0X00FF00
 #define WHITE 0XFFFFFF
-#define WIN_WIDTH 600
-#define WIN_HEIGHT 300
-#define	IMG_WIDTH WIN_WIDTH
-#define IMG_HEIGHT WIN_HEIGHT
+#define WIN_WIDTH 720
+#define WIN_HEIGHT 480
+#define	IMG_WIDTH (WIN_WIDTH - 240) / 10
+#define IMG_HEIGHT WIN_HEIGHT / 10
 
 //maybe you could turn each character, item and exit into position structure IF you need it fast later idk
+
 typedef struct	s_map {
-	char	*name;
+	char	*map;
 	int 	fd;
 	int		exit;
 	int		item;
@@ -44,25 +44,20 @@ typedef struct	s_map {
 } 				t_map;
 
 typedef struct	s_img {
-	void	*image;
-	char	*addr;
-	int		bpp;
-	int		line_len;
-	int		endian;
+	void	*img;
+	int		width;
+	int		height;
+	t_pos	pos;
 }				t_img;
 
 typedef struct	s_Ximg {
-	t_img	background;
-	t_img	wall;
+	void	*background;
+	void	*wall;
+	void	*exit;
+	void	*item;
 	t_img	character;
-	t_img	exit;
-	t_img	item;
-}				t_Ximg
-
-typedef struct s_pos{
-	int x;
-	int y;
-}			t_pos;
+	t_pos	pos;
+}				t_Ximg;
 
 typedef struct	s_xdata {
 	void	*mlx_ptr;
@@ -72,6 +67,11 @@ typedef struct	s_xdata {
 	t_map	map;
 }				t_xdata;
 
+typedef struct s_pos{
+	int x;
+	int y;
+}			t_pos;
+
 typedef struct s_rect{
 	t_pos position;
 	int width;
@@ -80,12 +80,16 @@ typedef struct s_rect{
 }	t_rect;
 
 //utils
-int	get_height(char *str);
-int	get_width(char *str);
-int	ft_strlen(char *str);
+int		get_height(char *str);
+int		get_width(char *str);
+int		ft_strlen(char *str);
 char	**ft_split(char const *s, char c);
 void	free_split(char **var);
-int	map_parse(t_xdata *data, t_map *MapCheck, char *file);
-int	gnl(int fd, char **str);
+int		map_parse(t_xdata *data, t_map *MapCheck, char *file);
+int		gnl(int fd, char **str);
+int		ber_file(char *mapName, char *extension);
+int		close_window(t_xdata *param);
+int		controls(int keysym, t_xdata *param);
+void	render(t_xdata *data);
 
 #endif
