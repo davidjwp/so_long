@@ -12,6 +12,7 @@
 
 #include "../so_long.h"
 
+//missing the item
 void	render_map(t_xdata *data, char pos)
 {
 	if (pos == '1')
@@ -35,15 +36,15 @@ void	render_init(t_xdata *data)
 	int	height;
 
 	data->Ximg->background = mlx_xpm_file_to_image(data->mlx_ptr,\
-	"xpm/background.xpm", &width, &height);
+	"init/xpm/background.xpm", &width, &height);
 	data->Ximg->wall = mlx_xpm_file_to_image(data->mlx_ptr,\
-	"xpm/wall.xpm", &width, &height);
+	"init/xpm/wall.xpm", &width, &height);
 	data->Ximg->exit = mlx_xpm_file_to_image(data->mlx_ptr,\
-	"xpm/exit.xpm", &width, &height);
+	"init/xpm/exit.xpm", &width, &height);
 	data->Ximg->item = mlx_xpm_file_to_image(data->mlx_ptr,\
-	"xpm/item.xpm", &width, &height);
+	"init/xpm/item.xpm", &width, &height);
 	data->Ximg->character.img = mlx_xpm_file_to_image(data->mlx_ptr,\
-	"xpm/character.xpm", &width, &height);
+	"init/xpm/character.xpm", &width, &height);
 }
 
 int	render(t_xdata *data)
@@ -62,6 +63,7 @@ int	render(t_xdata *data)
 			data->Ximg->pos.x = 0;
 		}
 		data->Ximg->pos.x += IMG_WIDTH;
+		i++;
 	}
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img_ptr,\
 	0, 0);

@@ -1,4 +1,3 @@
 break render
-break main
 break render_init
 break render_map

@@ -27,8 +27,8 @@
 #define WHITE 0XFFFFFF
 #define WIN_WIDTH 720
 #define WIN_HEIGHT 480
-#define	IMG_WIDTH (WIN_WIDTH - 240) / 5
-#define IMG_HEIGHT WIN_HEIGHT / 5
+#define	IMG_WIDTH (WIN_WIDTH - 240) / 10
+#define IMG_HEIGHT WIN_HEIGHT / 10
 
 typedef struct s_pos{
 	int x;
