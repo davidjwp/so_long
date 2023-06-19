@@ -38,7 +38,7 @@ int	gnl(int fd, char **str)
 	if (c == '\n')
 		return (free(buf), *str == NULL);
 	if (n)
-		buf[i++] = c;7
+		buf[i++] = c;
 	while (n && c != 0)
 	{
 		n = read(fd, &c, 1);
@@ -64,33 +64,4 @@ int	ber_file(char *mapName, char *extension)
 	if (!mapName[offset])
 		return (1);
 	return (0);
-}
-
-int	get_unit(char *map, char unit)
-{
-	int	i;
-	int	u;
-
-	i = 0;
-	u = 0;
-	if (unit == '1')
-		while (map[i])
-			if (map[i++] == '1')
-				u++;
-	if (unit == '0')
-		while (map[i])
-			if (map[i++] == '0')
-				u++;
-	if (unit == 'c')
-		while (map[i])
-			if (map[i++] == 'C')
-				u++;
-	if (unit == 'E')
-		while (map[i])
-			if (map[i++] == 'E')
-				u++;
-	if (unit == 'P')
-		while (map[i])
-			if (map[i++] == 'P')
-				u++;
 }

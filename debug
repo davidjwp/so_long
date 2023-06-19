@@ -1,2 +1,4 @@
-break map_parse
-break map_walls
+break render
+break main
+break render_init
+break render_map

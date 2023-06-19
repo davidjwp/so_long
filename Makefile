@@ -12,7 +12,7 @@
 
 CC			= clang
 
-CFLAGS		= -g3 #-Werror -Wall -Wextra
+CFLAGS		= -g3 -Werror -Wall -Wextra
 
 LINKER		= -L ./minilibx-linux
 
@@ -22,7 +22,8 @@ NAME		= so_long
 
 LIBX		= -lm -lX11 -lXext -lmlx
 
-SRCS		= map.c utils/utils.c utils/get_len.c utils/ft_split.c init/init.c init/hooks.c
+SRCS		= map.c utils/utils.c utils/get_len.c utils/ft_split.c init/init.c\
+			 init/hooks.c init/render.c
 
 HEADER		= so_long.h
 

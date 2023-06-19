@@ -27,10 +27,13 @@
 #define WHITE 0XFFFFFF
 #define WIN_WIDTH 720
 #define WIN_HEIGHT 480
-#define	IMG_WIDTH (WIN_WIDTH - 240) / 10
-#define IMG_HEIGHT WIN_HEIGHT / 10
+#define	IMG_WIDTH (WIN_WIDTH - 240) / 5
+#define IMG_HEIGHT WIN_HEIGHT / 5
 
-//maybe you could turn each character, item and exit into position structure IF you need it fast later idk
+typedef struct s_pos{
+	int x;
+	int y;
+}			t_pos;
 
 typedef struct	s_map {
 	char	*map;
@@ -62,15 +65,12 @@ typedef struct	s_Ximg {
 typedef struct	s_xdata {
 	void	*mlx_ptr;
 	void	*win_ptr;
+	void	*img_ptr;
 	t_Ximg	*Ximg;
 	t_pos	position;
 	t_map	map;
 }				t_xdata;
 
-typedef struct s_pos{
-	int x;
-	int y;
-}			t_pos;
 
 typedef struct s_rect{
 	t_pos position;
@@ -90,6 +90,6 @@ int		gnl(int fd, char **str);
 int		ber_file(char *mapName, char *extension);
 int		close_window(t_xdata *param);
 int		controls(int keysym, t_xdata *param);
-void	render(t_xdata *data);
+int		render(t_xdata *data);
 
 #endif
