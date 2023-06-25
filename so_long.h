@@ -29,6 +29,12 @@
 #define WIN_HEIGHT 480
 #define	IMG_WIDTH (WIN_WIDTH - 240) / 10
 #define IMG_HEIGHT WIN_HEIGHT / 10
+#define NULL (void *)0
+
+typedef enum {
+	true = 1,
+	false = 0
+}		bool;
 
 typedef struct s_pos{
 	int x;
