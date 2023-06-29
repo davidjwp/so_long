@@ -43,7 +43,7 @@ int	gnl(int fd, char **str)
 	{
 		n = read(fd, &c, 1);
 		if (c == '\n' && buf[i - 2] == '\n')
-			break;
+			break ;
 		if (n != 0)
 			buf[i] = c;
 		i++;

@@ -182,62 +182,45 @@ void	get_node_values(t_xdata d, t_node ***nod, char **map)
 	}
 }
 
+int	lowest_h(t_node *list, t_pos pos, int Flow, int	Hlow)
+{
+	pos.x = INT_MAX;
+	while (pos.g != pos.y)
+	{
+		if (list[pos.g].f == Flow && pos.g != pos.y)
+		{
+			if (list[pos.g].h < Hlow)
+			{
+				Hlow = list[pos.x].h;
+				pos.x = pos.g;
+			}
+		}
+		pos.g++;
+	}
+	return (pos.x);
+}
 
 int	lowest_f(t_node *list, t_pos pos)
 {
-	int	lowest_f;
-	int	lowest_h;
+	int	Flow;
+	int	Hlow;
 
-	lowest_h = INT_MAX;
-	lowest_f = list[pos.x].f;
+	Hlow = INT_MAX;
+	Flow = list[pos.x].f;
 	while (list[pos.x++].f != INT_MAX)
 	{
-		if (list[pos.x].f < lowest_f)
+		if (list[pos.x].f <= lowest_f)
 		{
-			lowest_f = list[pos.x].f;
-			pos.g = pos.x;
+			Flow = list[pos.x].f;
+			pos.y = pos.x;
 		}
 	}
-	pos.x = 0;
-	while (list[pos.x].f != INT_MAX)
-	{
-		pos.x++;
-		if (list[pos.x].f == lowest_f && pos.x != pos.g)
-			if (list[pos.x].h < list[pos.g].h)
-				lowest_h = list[pos.x].h;
-	}
-	if (lowest_h == INT_MAX)
-		return (pos.g);
-	return ()
+	Hlow = lowest_h(list, pos, Flow, Hlow);
+	if (Hlow == INT_MAX)
+		return (pos.y);
+	return (Hlow);
 }
 
-int	lowest_f(t_node *list, t_pos pos)
-{
-	int	lowest_f;
-	int	lowest_h;
-
-	pos.g = pos.x;
-	lowest_h = INT_MAX;
-	lowest_f = list[pos.x].f;
-	while (pos.y--)
-	{
-		while (list[pos.x++].f != INT_MAX)
-		{
-			if (list[pos.x].f < lowest_f && pos.x != pos.g)
-			{
-				lowest_f = list[pos.x].f;
-				pos.g = pos.x;
-			}
-			else if (list[pos.x].f == lowest_f && pos.x != pos.g)
-			{
-				lowest_h = list[pos.x].h;
-				pos.g = pos.x;
-			}
-		}
-		pos.x = 0;
-	}
-	return (pos.g);
-}
 
 //size reference
 int	update_node(t_node node, t_node **list, t_xdata *data)
@@ -249,14 +232,16 @@ int	update_node(t_node node, t_node **list, t_xdata *data)
 	node.h = ((node.x - data->start_node.x) * -1) +\
 	((node.y - data->start_node.y) * -1);
 	node.f = node.h + node.g;
-	while (i < 64)
+	while (i < 65)
 		if (&(*list)[i++] == &node)
 			if ((*list)[--i].g > node.g)
 				return ((*list)[--i].g = node.g, 0);
-	if (&(*list)[i] == &node)
-		return (0);
 	i = 0;
-	while ((*list)[i].f != INT_MAX)
+	while (i < 65 && &(*list)[i] != &node)
+		if (&(*list)[i++] == &node)
+			return (0);
+	i = 0;
+	while (&(*list)[i] != &data->default_node)
 		i++;
 	return ((*list)[i] = node, 0);
 }
@@ -266,37 +251,67 @@ void	calc_neighbor(t_node ***node, t_node **list, t_xdata *data)
 	int	i;
 
 	i = 0;
-	if (LEFT_NODE->wall == false || LEFT_NODE->visited == true)
+	if (LEFT_NODE->wall == false && LEFT_NODE->visited != true)
 		update_node(*LEFT_NODE, list, data);
-	if (UP_NODE->wall == false || UP_NODE->visited == true)
+	if (UP_NODE->wall == false && UP_NODE->visited != true)
 		update_node(*UP_NODE, list, data);
-	if (DOWN_NODE->wall == false || DOWN_NODE->visited == true)
+	if (DOWN_NODE->wall == false && DOWN_NODE->visited != true)
 		update_node(*DOWN_NODE, list, data);
-	if (RIGHT_NODE->wall == false || LEFT_NODE->visited == true)
+	if (RIGHT_NODE->wall == false && LEFT_NODE->visited != true)
 		update_node(*RIGHT_NODE, list, data);
 	while (&(*list)[i] != &data->current_node)
 		i++;
 	(*list)[i] = data->default_node;
 }
 
+//size reference
 bool	a_star(t_node *list, t_node **node, t_xdata *data)
 {
+	int	i;
 	int	distance;
 
+	i = 0;
 	distance = 0;
 	while (&list != NULL)
 	{
-		data->current_node = list[lowest_f(list, (t_pos){0, 2, 0})];
+		data->current_node = list[lowest_f(list, (t_pos){0, 0, 0})];
 		data->current_node.visited = true;
 		distance++;
 		if (&(data)->current_node == &(data)->end_node)
 			return (true);
 		else
 			calc_neighbor(&node, &list, data);
+		while (&list[i] == &data->default_node)
+			if (i++ == 64)
+				list = NULL;
 	}
 	return (false);
 }
 
+//size reference
+void	fill_list(t_node *list, t_xdata *data)
+{
+	int	i;
+
+	i = 0;
+	while (i != 64)
+	{
+		list[i] = data->default_node;
+		i++;
+	}
+	list[i] = data->default_node;
+}
+
+// typedef struct s_node{
+
+// 	int	x;
+// 	int	y;
+// 	bool	visited;
+// 	bool	wall;
+// 	int	f;
+// 	int	g;
+// 	int	h;
+// }			t_node;
 //size reference
 int	main(int argc, char **argv)
 {
@@ -345,6 +360,7 @@ int	main(int argc, char **argv)
 			y++;
 		}
 	}
+	fill_list(list, &data);
 	node[y][x].h = ((i - node[y][x].x) * -1) + ((j - node[y][x].y) * -1);
 	list[0] = node[y][x];
 	data.start_node = node[y][x];

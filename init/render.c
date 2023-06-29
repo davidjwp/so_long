@@ -21,13 +21,17 @@ void	render_map(t_xdata *data, char pos)
 	else if (pos == '0')
 		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,\
 		data->Ximg->background, data->Ximg->pos.x, data->Ximg->pos.y);
-	else if (pos == 'C')
+	else if (pos == 'P')
 		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,\
-		data->Ximg->character.img, data->Ximg->character.pos.x,\
-		data->Ximg->character.pos.x);
+		data->Ximg->character.img, data->Ximg->character.pos.x + data->Ximg->pos.x,\
+		data->Ximg->character.pos.y + data->Ximg->pos.y);
 	else if (pos == 'E')
 		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,\
 		data->Ximg->exit, data->Ximg->pos.x, data->Ximg->pos.y);
+	else if (pos == 'C')
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,\
+		data->Ximg->item, data->Ximg->pos.x, data->Ximg->pos.y);
+
 }
 
 void	render_init(t_xdata *data)
@@ -52,6 +56,8 @@ int	render(t_xdata *data)
 	int	i;
 
 	i = 0;
+	data->Ximg->pos.x = 0;
+	data->Ximg->pos.y = 0;
 	render_init(data);
 	while (data->map.map[i])
 	{
@@ -65,7 +71,5 @@ int	render(t_xdata *data)
 		data->Ximg->pos.x += IMG_WIDTH;
 		i++;
 	}
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img_ptr,\
-	0, 0);
 	return (0);
 }

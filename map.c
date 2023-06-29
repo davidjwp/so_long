@@ -12,8 +12,6 @@
 
 #include "so_long.h"
 
-/*you should also check for the proper file extension  */
-
 /*
 ** filters the map to only look for a couple characters
 */
@@ -22,34 +20,6 @@ int	is_map(char c)
 	if (c == '0' || c == '1' || c == 'C' || c == 'P' || c == 'E' || c == '\n')
 		return (1);
 	return (0);
-}
-
-/*
-** the way i interpret the rule about needing to have a 
-** "valid path (i.e. a path you can take)" is that it should be taken as 
-** an error that you have a map in which you cannot move in any direction
-** this function simply checks that
-*/
-int	map_path(char **map, t_pos pos)
-{
-	while (map[pos.y][pos.x] != 'P')
-	{
-		if (map[pos.y][pos.x++] == 0)
-		{
-			pos.y++;
-			pos.x = 0;
-		}
-	}
-	if (map[pos.y][pos.x + 1] == '0' || map[pos.y][pos.x - 1] == '0' || \
-	map[pos.y + 1][pos.x] == '0' || map[pos.y - 1][pos.x] == '0')
-		return (1);
-	else if (map[pos.y][pos.x + 1] == 'C' || map[pos.y][pos.x - 1] == 'C' || \
-	map[pos.y + 1][pos.x] == 'C' || map[pos.y - 1][pos.x] == 'C')
-		return (1);
-	else if (map[pos.y][pos.x + 1] == 'E' || map[pos.y][pos.x - 1] == 'E' || \
-	map[pos.y + 1][pos.x] == 'E' || map[pos.y - 1][pos.x] == 'E')
-		return (1);
-	return (perror("Error no path"), 0);
 }
 
 /*
@@ -137,7 +107,10 @@ int	map_parse(t_xdata *data, t_map *MapCheck, char *file)
 	if (!map_check(&data->map, map))
 		return (free(map), close(data->map.fd),0);
 	map_split = ft_split(map, '\n');
-	if (!map_path(map_split, (t_pos){0, 0}))
+	if (ft_strlen(map_split[0]) >= 64)
+		return (perror("Error map too big"), free(map), free_split(map_split)\
+		, close(data->map.fd), 0);
+	if (a_star(map_split, (star_t){false, false, 0, 0, 0, INT_MAX, INT_MAX}))
 		return(free(map), free_split(map_split), close(data->map.fd), 0);
 	data->map.map = map;
 	return (free_split(map_split), close(data->map.fd), 1);

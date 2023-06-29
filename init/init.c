@@ -22,12 +22,13 @@ void	init_hooks(t_xdata data, t_Ximg *ximg)
 
 void	destroy_all(t_xdata data)
 {
-	mlx_destroy_image(data.mlx_ptr, data.Ximg->background);
-	mlx_destroy_image(data.mlx_ptr, data.Ximg->character.img);
-	mlx_destroy_image(data.mlx_ptr, data.Ximg->exit);
-	mlx_destroy_image(data.mlx_ptr, data.Ximg->item);
-	mlx_destroy_image(data.mlx_ptr, data.Ximg->wall);
+	// mlx_destroy_image(data.mlx_ptr, data.Ximg->background);
+	// mlx_destroy_image(data.mlx_ptr, data.Ximg->character.img);
+	// mlx_destroy_image(data.mlx_ptr, data.Ximg->exit);
+	// mlx_destroy_image(data.mlx_ptr, data.Ximg->item);
+	// mlx_destroy_image(data.mlx_ptr, data.Ximg->wall);
 	mlx_destroy_display(data.mlx_ptr);
+	mlx_loop_end(data.mlx_ptr);
 	free(data.mlx_ptr);
 }
 
