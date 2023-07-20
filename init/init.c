@@ -32,6 +32,7 @@ void	destroy_all(t_xdata data)
 	free(data.mlx_ptr);
 }
 
+//make sure to free data.map
 int main(int argc, char **argv)
 {
     t_xdata data;
@@ -40,7 +41,8 @@ int main(int argc, char **argv)
 		return (0);
 	if (!map_parse(&data, &(t_map){argv[1], 0, 0, 0, 0, {0, 0, 0, 0}, 0, 0},\
 	argv[1]))
-		return (0);
+		return (printf("bad map\n"),0);
+	return (printf("good map\n"), 1);//here
 	data.mlx_ptr = mlx_init();
 	if (data.mlx_ptr == NULL)
 		return (perror("Error mlx_init failed"), 0);
@@ -49,7 +51,7 @@ int main(int argc, char **argv)
 		return (free(data.win_ptr), perror("Error new window"), 0);
 	data.img_ptr = mlx_new_image(data.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	init_hooks(data, &(t_Ximg){NULL, NULL, NULL, NULL,\
-	(t_img){NULL, 0, 0, (t_pos){0, 0}},	(t_pos){0, 0}});
+	(t_img){NULL, 0, 0, (t_pos){0, 0}},	(t_pos){0, 0}, (t_pos){0, 0}});
 	mlx_loop(data.mlx_ptr);
 	destroy_all(data);
 	return (0);
