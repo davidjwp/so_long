@@ -22,16 +22,17 @@ void	init_hooks(t_xdata data, t_Ximg *ximg)
 
 void	destroy_all(t_xdata data)
 {
-	// mlx_destroy_image(data.mlx_ptr, data.Ximg->background);
-	// mlx_destroy_image(data.mlx_ptr, data.Ximg->character.img);
+	// mlx_destroy_image(data.mlx_ptr, data.Ximg->background);this is also causing a segfault, probably 
+	// mlx_destroy_image(data.mlx_ptr, data.Ximg->character.img);because it's not actually set yet
 	// mlx_destroy_image(data.mlx_ptr, data.Ximg->exit);
 	// mlx_destroy_image(data.mlx_ptr, data.Ximg->item);
 	// mlx_destroy_image(data.mlx_ptr, data.Ximg->wall);
-	mlx_destroy_display(data.mlx_ptr);
+	// mlx_destroy_display(data.mlx_ptr);
 	mlx_loop_end(data.mlx_ptr);
 	free(data.mlx_ptr);
 }
 
+//make sure to free data.map
 int main(int argc, char **argv)
 {
     t_xdata data;
@@ -49,7 +50,7 @@ int main(int argc, char **argv)
 		return (free(data.win_ptr), perror("Error new window"), 0);
 	data.img_ptr = mlx_new_image(data.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	init_hooks(data, &(t_Ximg){NULL, NULL, NULL, NULL,\
-	(t_img){NULL, 0, 0, (t_pos){0, 0}},	(t_pos){0, 0}});
+	(t_img){NULL, 0, 0, (t_pos){0, 0}},	(t_pos){0, 0}, (t_pos){0, 0}});
 	mlx_loop(data.mlx_ptr);
 	destroy_all(data);
 	return (0);

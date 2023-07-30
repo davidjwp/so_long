@@ -14,7 +14,8 @@
 
 int	close_window(t_xdata *param)
 {
-	mlx_destroy_window(param->mlx_ptr, param->win_ptr);
+	// mlx_destroy_window(param->mlx_ptr, param->win_ptr);THIS is causing a segfault probaBLY Because it's not properly set
+	// param->win_ptr = NULL;dk if this does anything
 	mlx_loop_end(param->mlx_ptr);
 	return (0);
 }

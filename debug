@@ -1,3 +1,3 @@
-break render
-break render_init
-break render_map
+break main_algo
+break calc_nodes
+break update_node

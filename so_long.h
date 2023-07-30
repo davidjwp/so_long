@@ -23,11 +23,15 @@
 # include <fcntl.h>
 # include <limits.h>
 
+# define true 1
+# define false 0
 # define RED 0XFF0000
 # define GREEN 0X00FF00
 # define WHITE 0XFFFFFF
 # define WIN_WIDTH 720
 # define WIN_HEIGHT 480
+# define IMG_WIDTH 32
+# define IMG_HEIGHT 32
 // # define IMG_WIDTH (WIN_WIDTH - 240) / 15
 // # define IMG_HEIGHT WIN_HEIGHT / 15
 // # define UP map[paths.start.y + 1][paths.start.x]
@@ -40,26 +44,25 @@
 // # define RIGHT_NODE star->map_nodes[star->current_nodes.y][star->current_nodes.x + 1]
 
 
-typedef enum {
-	true = 1,
-	false = 0
-}			bool;
-
 typedef struct s_pos{
-	int x;
 	int y;
+	int x;
 }			t_pos;
 
 typedef struct s_node{
-
-	bool	visited;
-	bool	wall;
+	int	visited;
+	int	wall;
 	int		x;
 	int		y;
 	int		f;
 	int		g;
 	int		h;
 }			t_node;
+
+typedef struct s_list {
+	t_node	node;
+	struct s_list	*next;
+}			t_list;
 
 typedef struct	s_map {
 	char	*map;
@@ -86,6 +89,7 @@ typedef struct	s_Ximg {
 	void	*item;
 	t_img	character;
 	t_pos	pos;
+	t_pos	img_siz;
 }				t_Ximg;
 
 typedef struct	s_xdata {
@@ -97,15 +101,23 @@ typedef struct	s_xdata {
 	t_map	map;
 }				t_xdata;
 
-typedef struct	s_star {
-	t_node	default_node;
-	t_node	start_node;
-	t_node	end_node;
-	t_node	current_node;
-	t_node	map_nodes[64][64];
-	t_node	list[64];
+// typedef struct	s_star {
+// 	t_node	default_node;
+// 	t_node	start_node;
+// 	t_node	end_node;
+// 	t_node	current_node;
+// 	t_node	 **map_nodes;
+// 	t_node	*list;
+// 	int	distance;
+// }				star_t;
+
+typedef	struct star_s {
+	t_pos	start;
+	t_pos	end;
+	t_pos	mapWL;
 	int	distance;
-}				star_t;
+}		star_t;
+
 
 typedef struct s_rect{
 	t_pos position;
@@ -128,6 +140,41 @@ int		controls(int keysym, t_xdata *param);
 int		render(t_xdata *data);
 int		lowest_f(t_node *list, t_pos pos);
 int		lowest_h(t_node *list, t_pos pos, int Flow, int	Hlow);
-t_pos	get_pos(char **map, char c, t_pos pos);
+t_pos	get_pos(char **map, char c);
+// int		a_star(char	**map);
+t_pos	get_map_LW(char	**map);
+int		a_star(char **map, star_t star);
+int		empty_list(t_node *list, t_node default_node);
+void	free_map(t_node **map_node, star_t star);
+void	add_list(t_list **list, t_node newnode);
+t_node	*find_lowestF(t_list **list);
+void	del_list(t_list **list);
+void	free_list(t_list **list);
 
 #endif
+
+// typedef struct s_node{
+// 	int	visited;
+// 	int	wall;
+// 	int		x;
+// 	int		y;
+// 	int		f;
+// 	int		g;
+// 	int		h;
+// }			t_node;
+
+// typedef struct	s_star {
+// 	t_node	default_node;
+// 	t_node	start_node;
+// 	t_node	end_node;
+// 	t_node	current_node;
+// 	t_node	 map_nodes[64][64];
+// 	t_node	list[64];
+// 	int	distance;
+// }				star_t;
+
+
+// int	funct(star_t *star)
+// {
+// 	star->default_node = (t_node){false, false, 0,0,0,INT_MAX, INT_MAX};
+// }

@@ -13,6 +13,23 @@
 #include "so_long.h"
 
 /*
+** this gets the length and width of the map
+*/
+t_pos	get_map_LW(char	**map)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	y = 0;
+	while (map[y] != NULL)
+		y++;
+	while (map[0][x] != 0)
+		x++;
+	return ((t_pos){y, x});
+}
+
+/*
 ** filters the map to only look for a couple characters
 */
 int	is_map(char c)
@@ -108,10 +125,12 @@ int	map_parse(t_xdata *data, t_map *MapCheck, char *file)
 		return (free(map), close(data->map.fd),0);
 	map_split = ft_split(map, '\n');
 	if (ft_strlen(map_split[0]) >= 64)
-		return (perror("Error map too big"), free(map), free_split(map_split)\
-		, close(data->map.fd), 0);
-	if (a_star(map_split, (star_t){false, false, 0, 0, 0, INT_MAX, INT_MAX}))
-		return(free(map), free_split(map_split), close(data->map.fd), 0);
+		return (perror("Error map too big"), free(map), free_split(map_split),\
+		close(data->map.fd), 0);
+	if (!a_star(map_split, (star_t){get_pos(map_split, 'p'), get_pos(map_split,\
+	'E'), get_map_LW(map_split), 0}))
+		return(perror("wrong path"), free(map), free_split(map_split),\
+		close(data->map.fd), 0);
 	data->map.map = map;
 	return (free_split(map_split), close(data->map.fd), 1);
 }
