@@ -22,12 +22,12 @@ void	init_hooks(t_xdata data, t_Ximg *ximg)
 
 void	destroy_all(t_xdata data)
 {
-	// mlx_destroy_image(data.mlx_ptr, data.Ximg->background);
-	// mlx_destroy_image(data.mlx_ptr, data.Ximg->character.img);
+	// mlx_destroy_image(data.mlx_ptr, data.Ximg->background);this is also causing a segfault, probably 
+	// mlx_destroy_image(data.mlx_ptr, data.Ximg->character.img);because it's not actually set yet
 	// mlx_destroy_image(data.mlx_ptr, data.Ximg->exit);
 	// mlx_destroy_image(data.mlx_ptr, data.Ximg->item);
 	// mlx_destroy_image(data.mlx_ptr, data.Ximg->wall);
-	mlx_destroy_display(data.mlx_ptr);
+	// mlx_destroy_display(data.mlx_ptr);
 	mlx_loop_end(data.mlx_ptr);
 	free(data.mlx_ptr);
 }
@@ -41,8 +41,7 @@ int main(int argc, char **argv)
 		return (0);
 	if (!map_parse(&data, &(t_map){argv[1], 0, 0, 0, 0, {0, 0, 0, 0}, 0, 0},\
 	argv[1]))
-		return (printf("bad map\n"),0);
-	return (printf("good map\n"), 1);//here
+		return (0);
 	data.mlx_ptr = mlx_init();
 	if (data.mlx_ptr == NULL)
 		return (perror("Error mlx_init failed"), 0);

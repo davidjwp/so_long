@@ -73,3 +73,11 @@ int	render(t_xdata *data)
 	}
 	return (0);
 }
+// typedef struct	s_xdata {
+// 	void	*mlx_ptr;
+// 	void	*win_ptr;
+// 	void	*img_ptr;
+// 	t_Ximg	*Ximg;
+// 	t_pos	position;
+// 	t_map	map;
+// }				t_xdata;

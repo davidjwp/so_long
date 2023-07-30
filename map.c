@@ -12,6 +12,9 @@
 
 #include "so_long.h"
 
+/*
+** this gets the length and width of the map
+*/
 t_pos	get_map_LW(char	**map)
 {
 	int	x;
@@ -126,7 +129,8 @@ int	map_parse(t_xdata *data, t_map *MapCheck, char *file)
 		close(data->map.fd), 0);
 	if (!a_star(map_split, (star_t){get_pos(map_split, 'p'), get_pos(map_split,\
 	'E'), get_map_LW(map_split), 0}))
-		return(free(map), free_split(map_split), close(data->map.fd), 0);
+		return(perror("wrong path"), free(map), free_split(map_split),\
+		close(data->map.fd), 0);
 	data->map.map = map;
 	return (free_split(map_split), close(data->map.fd), 1);
 }

@@ -10,13 +10,13 @@
 #                                                                              #
 # **************************************************************************** #
 
-CC			= clang
+CC			= gcc
 
-CFLAGS		= -g #-Werror -Wall -Wextra
+CFLAGS		= -g3 #-Werror -Wall -Wextra
 
-LINKER		= -L ./minilibx-linux 
+LINKER		= -L/minilibx-linux 
 
-INCLUDE		= -I ./minilibx-linux
+INCLUDE		= -I/minilibx-linux
 
 NAME		= so_long
 
