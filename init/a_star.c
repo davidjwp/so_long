@@ -12,123 +12,6 @@
 
 #include "../so_long.h"
 
-//size dependant
-// void	fill_map_nodes(star_t star, t_node **node, char **map, t_pos p)
-// {
-// 	while (map[p.y] != NULL)
-// 	{
-// 		while (map[p.y][p.x] != 0)
-// 		{
-// 			if (map[p.y][p.x] != 'P')
-// 			{
-// 				node[p.y][p.x] = star.default_node;
-// 				node[p.y][p.x].x = p.x;
-// 				node[p.y][p.x].y = p.y;
-// 				if (map[p.y][p.x] == '1')
-// 					node[p.y][p.x].wall = true;
-// 			}
-// 			p.x++;
-// 		}
-// 		p.x = 0;
-// 		p.y++;
-// 	}
-// }
-
-
-// //size reference
-// int	update_node(t_node node, t_node *list, star_t star)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	node.g = star.distance + 1;
-// 	node.h = ((node.x - star.start_node.x) * -1) +\
-// 	((node.y - star.start_node.y) * -1);
-// 	node.f = node.h + node.g;
-// 	while (i < 65)
-// 		if (&list[i++] == &node)
-// 			if (list[--i].g > node.g)
-// 				return (list[--i].g = node.g, 0);
-// 	i = 0;
-// 	while (i < 65 && &list[i] != &node)
-// 		if (&list[i++] == &node)
-// 			return (0);
-// 	i = 0;
-// 	while (&list[i] != &star.default_node)
-// 		i++;
-// 	return (list[i] = node, 0);
-// }
-
-// void	calc_neighbor(t_node **map_nodes, t_pos pos, star_t star)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	if (map_nodes[pos.y + 1][pos.x].wall == false &&\
-// 	map_nodes[pos.y + 1][pos.x].visited != true)
-// 		update_node(map_nodes[pos.y + 1][pos.x], star.list, star);
-// 	if (map_nodes[pos.y - 1][pos.x].wall == false &&\
-// 	map_nodes[pos.y - 1][pos.x].visited != true)
-// 		update_node(map_nodes[pos.y - 1][pos.x], star.list, star);
-// 	if (map_nodes[pos.y][pos.x + 1].wall == false &&\
-// 	map_nodes[pos.y][pos.x + 1].visited != true)
-// 		update_node(map_nodes[pos.y][pos.x + 1], star.list, star);
-// 	if (map_nodes[pos.y][pos.x - 1].wall == false &&\
-// 	map_nodes[pos.y][pos.x - 1].visited != true)
-// 		update_node(map_nodes[pos.y][pos.x - 1], star.list, star);
-// 	while (&star.list[i] != &star.current_node)
-// 		i++;
-// 	star.list[i] = star.default_node;
-// }
-
-// int	main_algo(star_t star)
-// {
-// 	int	distance;
-
-// 	distance = 0;
-// 	while (!empty_list(star.list, star.default_node))
-// 	{
-// 		star.current_node = star.list[lowest_f(star.list, (t_pos){0, 0})];
-// 		star.current_node.visited = true;
-// 		distance++;
-// 		if (&(star).current_node == &(star).end_node)
-// 			return (true);
-// 		else
-// 			calc_neighbor(star.map_nodes, (t_pos){0, 0}, star);
-// 	}
-// 	return (false);
-// }
-
-// int	a_star(char **map)
-// {
-// 	star_t	star;
-// 	t_pos	start;
-// 	t_pos	end;
-// 	int	i;
-
-	
-// 	star.default_node = (t_node){false, false, 0, 0, 0, INT_MAX, INT_MAX};
-// 	star.current_node = (t_node){false, false, 0, 0, 0, INT_MAX, INT_MAX};
-// 	i = 0;
-// 	fill_map_nodes(star, star.map_nodes, map, (t_pos){0, 0});
-// 	while (i < 65)
-// 		star.list[i] = star.default_node;
-// 	end = get_pos(map, 'E', (t_pos){0, 0});
-// 	star.end_node = star.map_nodes[end.y][end.x];
-// 	start = get_pos(map, 'P', (t_pos){0,0});
-// 	star.map_nodes[start.y][start.x].h = ((end.x - start.x) * -1) +\
-// 	((end.y - start.y) * -1);
-// 	star.map_nodes[start.y][start.x].g = 0;
-// 	star.map_nodes[start.y][start.x].f = star.map_nodes[start.y][start.x].g +\
-// 	star.map_nodes[start.y][start.x].h;
-// 	star.start_node = star.map_nodes[start.y][start.x];
-// 	star.list[0] = star.start_node;
-// 	if (main_algo(star) == true)
-// 		return (1);
-// 	return (0);
-// }
-
-
 int	update_node(t_node node, t_list *list, star_t star)
 {
 	t_list	*current;
@@ -162,27 +45,14 @@ void	calc_nodes(t_node **mnodes, t_list *lst, t_node *cnode, star_t star)
 		update_node(mnodes[cnode->y][cnode->x - 1], lst, star);
 }
 
-int	print_list(t_list **list)
+void	printcurrent(t_list *list)
 {
-	t_list	*current;
-	int	i;
+	t_list	*tmp;
 
-	i = 0;
-	current = *list;
-	if (current == NULL)
-		return (0);
-	else if (current->next == NULL)
-		return (printf("%i-{v:%i|x:%i|y:%i|f:%i|h:%i}\n", i++,\
-		current->node.visited, current->node.x, current->node.y,\
-		current->node.f, current->node.h), 0);
-	while (current->next != NULL)
-	{
-		printf ("%i-{v:%i|x:%i|y:%i|f:%i|h:%i}\n", i++,\
-		current->node.visited, current->node.x,	current->node.y,\
-		current->node.f, current->node.h);
-		current = current->next;
-	}
-	return (0);
+	tmp = list;
+	while (tmp->node.visited != true)
+		tmp = tmp->next;
+	printf("(%i, %i)", tmp->node.x, tmp->node.y);
 }
 
 int	main_algo(t_node **map_node, t_pos start, t_pos end, star_t star)
@@ -198,6 +68,7 @@ int	main_algo(t_node **map_node, t_pos start, t_pos end, star_t star)
 			break;
 		currentnode = find_lowestF(&list);
 		currentnode->visited = true;
+		printcurrent(list);
 		map_node[currentnode->y][currentnode->x].visited = true;
 		if (currentnode->x == end.x && currentnode->y == end.y)
 			return (free_map(map_node, star), free_list(&list), 1);
@@ -240,6 +111,7 @@ int	a_star(char **map, star_t star)
 	t_pos	start;
 	t_pos	end;
 
+	write(1, "Path: ",6);
 	map_node = create_map(map, map_node, star, (t_node){false, false, 0, 0,\
 	INT_MAX, INT_MAX, INT_MAX});
 	start = get_pos(map, 'P');

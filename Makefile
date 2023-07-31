@@ -12,11 +12,11 @@
 
 CC			= gcc
 
-CFLAGS		= -g3 #-Werror -Wall -Wextra
+CFLAGS		= -g3 -Imlx #-Werror -Wall -Wextra
 
-LINKER		= -L/minilibx-linux 
+LINKER		= -L ./minilibx-linux
 
-INCLUDE		= -I/minilibx-linux
+INCLUDE		= -I ./minilibx-linux
 
 NAME		= so_long
 
