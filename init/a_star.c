@@ -45,16 +45,6 @@ void	calc_nodes(t_node **mnodes, t_list *lst, t_node *cnode, star_t star)
 		update_node(mnodes[cnode->y][cnode->x - 1], lst, star);
 }
 
-void	printcurrent(t_list *list)
-{
-	t_list	*tmp;
-
-	tmp = list;
-	while (tmp->node.visited != true)
-		tmp = tmp->next;
-	printf("(%i, %i)", tmp->node.x, tmp->node.y);
-}
-
 int	main_algo(t_node **map_node, t_pos start, t_pos end, star_t star)
 {
 	t_node	*currentnode;
@@ -68,14 +58,13 @@ int	main_algo(t_node **map_node, t_pos start, t_pos end, star_t star)
 			break;
 		currentnode = find_lowestF(&list);
 		currentnode->visited = true;
-		printcurrent(list);
 		map_node[currentnode->y][currentnode->x].visited = true;
 		if (currentnode->x == end.x && currentnode->y == end.y)
-			return (free_map(map_node, star), free_list(&list), 1);
+			return (free_map_list(map_node, star, &list), 1);
 		calc_nodes(map_node, list, currentnode, star);
 		del_list(&list);
 	}
-	return (0);
+	return (free_map_list(map_node, star, &list), 0);
 }
 
 
@@ -111,7 +100,6 @@ int	a_star(char **map, star_t star)
 	t_pos	start;
 	t_pos	end;
 
-	write(1, "Path: ",6);
 	map_node = create_map(map, map_node, star, (t_node){false, false, 0, 0,\
 	INT_MAX, INT_MAX, INT_MAX});
 	start = get_pos(map, 'P');
@@ -121,7 +109,7 @@ int	a_star(char **map, star_t star)
 	map_node[start.y][start.x].h = 0;
 	if (main_algo(map_node, start, end, star))
 		return (1);
-	return (free_map(map_node, star), 0);
+	return (0);
 }
 
 /*
