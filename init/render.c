@@ -48,8 +48,8 @@ int	render(t_xdata *data)
 		i++;
 	}
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, \
-	data->Ximg->character.img, data->Ximg->character.pos.y, \
-	data->Ximg->character.pos.x);
+	data->Ximg->character.img, data->Ximg->character.pos.x, \
+	data->Ximg->character.pos.y);
 	return (0);
 } 
 // typedef struct	s_xdata {
