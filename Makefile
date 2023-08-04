@@ -14,13 +14,11 @@ CC			= gcc
 
 CFLAGS		= -g3 #-Werror -Wall -Wextra
 
-LINKER		= -L/minilibx-linux 
-
-INCLUDE		= -I/minilibx-linux
+INCLUDE		= -I ./minilibx-linux
 
 NAME		= so_long
 
-LIBX		= -lm -lX11 -lXext -lmlx
+LIBX		= -L ./minilibx-linux -lmlx -lm -lX11 -lXext
 
 SRCS		= map.c utils/utils.c utils/get_len.c utils/ft_split.c init/init.c\
 			 init/hooks.c init/render.c init/a_star.c init/a_utils.c
@@ -32,7 +30,7 @@ OBJS		= $(SRCS:.c=.o)
 all:$(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(LINKER) $(INCLUDE) $(OBJS) $(LIBX) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBX) -o $(NAME)
 
 %.o: %.c $(HEADER)
 	$(CC) -c $(CFLAGS) $(INCLUDE) $< -o $@

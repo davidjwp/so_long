@@ -32,6 +32,7 @@
 # define WIN_HEIGHT 480
 # define IMG_WIDTH 32
 # define IMG_HEIGHT 32
+# define BIT_SIZ	32
 // # define IMG_WIDTH (WIN_WIDTH - 240) / 15
 // # define IMG_HEIGHT WIN_HEIGHT / 15
 // # define UP map[paths.start.y + 1][paths.start.x]
@@ -77,8 +78,6 @@ typedef struct	s_map {
 
 typedef struct	s_img {
 	void	*img;
-	int		width;
-	int		height;
 	t_pos	pos;
 }				t_img;
 
@@ -141,15 +140,13 @@ int		render(t_xdata *data);
 int		lowest_f(t_node *list, t_pos pos);
 int		lowest_h(t_node *list, t_pos pos, int Flow, int	Hlow);
 t_pos	get_pos(char **map, char c);
-// int		a_star(char	**map);
-t_pos	get_map_LW(char	**map);
+// void	render_init(t_xdata *data)
 int		a_star(char **map, star_t star);
 int		empty_list(t_node *list, t_node default_node);
-void	free_map(t_node **map_node, star_t star);
+void	free_map_list(t_node **map_node, star_t star, t_list **list);
 void	add_list(t_list **list, t_node newnode);
 t_node	*find_lowestF(t_list **list);
 void	del_list(t_list **list);
-void	free_list(t_list **list);
 
 #endif
 

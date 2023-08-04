@@ -12,74 +12,6 @@
 
 #include "../so_long.h"
 
-// int	lowest_h(t_node *list, t_pos pos, int Flow, int	Hlow)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	pos.x = INT_MAX;
-// 	while (i != pos.y)
-// 	{
-// 		if (list[i].f == Flow && i != pos.y)
-// 		{
-// 			if (list[i].h < Hlow)
-// 			{
-// 				Hlow = list[pos.x].h;
-// 				pos.x = i;
-// 			}
-// 		}
-// 		i++;
-// 	}
-// 	return (pos.x);
-// }
-
-// int	lowest_f(t_node *list, t_pos pos)
-// {
-// 	int	Flow;
-// 	int	Hlow;
-
-// 	Hlow = INT_MAX;
-// 	Flow = list[pos.x].f;
-// 	while (list[pos.x++].f != INT_MAX)
-// 	{
-// 		if (list[pos.x].f <= Flow)
-// 		{
-// 			Flow = list[pos.x].f;
-// 			pos.y = pos.x;
-// 		}
-// 	}
-// 	Hlow = lowest_h(list, pos, Flow, Hlow);
-// 	if (Hlow == INT_MAX)
-// 		return (pos.y);
-// 	return (Hlow);
-// }
-
-// t_pos	get_pos(char **map, char c, t_pos pos)
-// {
-// 	while (map[pos.y][pos.x] != c)
-// 	{
-// 		if (!map[pos.y])
-// 		{
-// 			pos.x = 0;
-// 			pos.y++;
-// 		}
-// 		pos.x++;
-// 	}
-// 	return (pos);
-// }
-
-// int	empty_list(t_node *list, t_node default_node)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (&list[i] == &default_node && i < 65)
-// 		i++;
-// 	if (i == 64)
-// 		return (true);
-// 	return (false);
-// }
-
 t_node	*find_lowestF(t_list **list)
 {
 	t_node	*lowestFnode;
@@ -172,7 +104,7 @@ void	del_list(t_list **list)
 	}
 }
 
-void	free_map(t_node **map_node, star_t star)
+void	free_map_list(t_node **map_node, star_t star, t_list **list)
 {
 	int	i;
 
@@ -184,10 +116,6 @@ void	free_map(t_node **map_node, star_t star)
 		i++;
 	}
 	free(map_node);
-}
-
-void	free_list(t_list **list)
-{
 	while ((*list)->next != NULL)
 	{
 		free(*list);

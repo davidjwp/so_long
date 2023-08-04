@@ -1,3 +1,1 @@
-break main_algo
-break calc_nodes
-break update_node
+break a_star

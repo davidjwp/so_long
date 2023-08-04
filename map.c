@@ -15,7 +15,7 @@
 /*
 ** this gets the length and width of the map
 */
-t_pos	get_map_LW(char	**map)
+t_pos	get_map_LW(char	**map, t_xdata *data)
 {
 	int	x;
 	int	y;
@@ -26,6 +26,8 @@ t_pos	get_map_LW(char	**map)
 		y++;
 	while (map[0][x] != 0)
 		x++;
+	data->map.height = y;
+	data->map.width = x;
 	return ((t_pos){y, x});
 }
 
@@ -127,10 +129,11 @@ int	map_parse(t_xdata *data, t_map *MapCheck, char *file)
 	if (ft_strlen(map_split[0]) >= 64)
 		return (perror("Error map too big"), free(map), free_split(map_split),\
 		close(data->map.fd), 0);
-	if (!a_star(map_split, (star_t){get_pos(map_split, 'p'), get_pos(map_split,\
-	'E'), get_map_LW(map_split), 0}))
+	if (!a_star(map_split, (star_t){get_pos(map_split, 'P'), get_pos(map_split,\
+	'E'), get_map_LW(map_split, data), 0}))
 		return(perror("wrong path"), free(map), free_split(map_split),\
 		close(data->map.fd), 0);
+	data->position = get_pos(map_split, 'P');
 	data->map.map = map;
 	return (free_split(map_split), close(data->map.fd), 1);
 }

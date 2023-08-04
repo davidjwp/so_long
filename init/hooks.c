@@ -25,12 +25,12 @@ int	controls(int keysym, t_xdata *param)
 	if (keysym == XK_Escape)
 		close_window(param);
 	else if (keysym == XK_w)
-		param->Ximg->character.pos.y += 10;
+		param->Ximg->character.pos.y -= BIT_SIZ;
 	else if (keysym == XK_a)
-		param->Ximg->character.pos.x -= 10;
+		param->Ximg->character.pos.x -= BIT_SIZ;
 	else if (keysym == XK_s)
-		param->Ximg->character.pos.y -= 10;
+		param->Ximg->character.pos.y += BIT_SIZ;
 	else if (keysym == XK_d)
-		param->Ximg->character.pos.x += 10;
+		param->Ximg->character.pos.x += BIT_SIZ;
 	return (0);
 }
