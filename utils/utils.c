@@ -12,6 +12,16 @@
 
 #include "../so_long.h"
 
+int	ft_strlen(char *str)
+{
+	int	len;
+
+	len = 0;
+	while (str[len] != 0)
+		len++;
+	return (len);
+}
+
 void	free_split(char **var)
 {
 	int	i;
@@ -64,4 +74,16 @@ int	ber_file(char *mapName, char *extension)
 	if (!mapName[offset])
 		return (1);
 	return (0);
+}
+
+void	err_msg(char *emsg)
+{
+	int	size;
+
+	size = 0;
+	while (emsg[size])
+		size++;
+	write (1, "Error\n", 7);
+	write (1, emsg, size + 1);
+	write (1, "\n", 1);
 }

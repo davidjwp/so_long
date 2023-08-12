@@ -32,18 +32,7 @@
 # define WIN_HEIGHT 480
 # define IMG_WIDTH 32
 # define IMG_HEIGHT 32
-# define BIT_SIZ	32
-// # define IMG_WIDTH (WIN_WIDTH - 240) / 15
-// # define IMG_HEIGHT WIN_HEIGHT / 15
-// # define UP map[paths.start.y + 1][paths.start.x]
-// # define DOWN map[paths.start.y - 1][paths.start.x]
-// # define LEFT map[paths.start.y][paths.start.x - 1]
-// # define RIGHT map[paths.start.y][paths.start.x + 1]
-// # define UP_NODE star->map_nodes[star->current_nodes.y + 1][star->current_nodes.x]
-// # define DOWN_NODE star->map_nodes[star->current_nodes.y - 1][star->current_nodes.x]
-// # define LEFT_NODE star->map_nodes[star->current_nodes.y][star->current_nodes.x - 1]
-// # define RIGHT_NODE star->map_nodes[star->current_nodes.y][star->current_nodes.x + 1]
-
+# define S_BIT	32
 
 typedef struct s_pos{
 	int y;
@@ -53,11 +42,11 @@ typedef struct s_pos{
 typedef struct s_node{
 	int	visited;
 	int	wall;
-	int		x;
-	int		y;
-	int		f;
-	int		g;
-	int		h;
+	int	x;
+	int	y;
+	int	f;
+	int	g;
+	int	h;
 }			t_node;
 
 typedef struct s_list {
@@ -66,49 +55,40 @@ typedef struct s_list {
 }			t_list;
 
 typedef struct	s_map {
-	char	*map;
 	int	fd;
 	int	exit;
-	int	item;
+	int	items;
 	int	character;
 	int	walls[4];
-	int	height;
-	int	width;
 } 				t_map;
 
-typedef struct	s_img {
-	void	*img;
+typedef struct s_char
+{
+	void	*up;
+	void	*down;
+	void	*left;
+	void	*right;
 	t_pos	pos;
-}				t_img;
+	int		items;
+	int		steps;
+}				t_char;
 
-typedef struct	s_Ximg {
-	void	*background;
-	void	*wall;
-	void	*exit;
-	void	*item;
-	t_img	character;
-	t_pos	pos;
-	t_pos	img_siz;
-}				t_Ximg;
 
 typedef struct	s_xdata {
 	void	*mlx_ptr;
 	void	*win_ptr;
 	void	*img_ptr;
-	t_Ximg	*Ximg;
-	t_pos	position;
-	t_map	map;
+	void	*background;
+	void	*wall;
+	void	*exit;
+	void	*item;
+	char	**map;
+	t_char	player;
+	t_pos	pos;
+	t_pos	img_siz;
+	t_pos	WinWL;
+	t_map	Map;
 }				t_xdata;
-
-// typedef struct	s_star {
-// 	t_node	default_node;
-// 	t_node	start_node;
-// 	t_node	end_node;
-// 	t_node	current_node;
-// 	t_node	 **map_nodes;
-// 	t_node	*list;
-// 	int	distance;
-// }				star_t;
 
 typedef	struct star_s {
 	t_pos	start;
@@ -117,21 +97,11 @@ typedef	struct star_s {
 	int	distance;
 }		star_t;
 
-
-typedef struct s_rect{
-	t_pos position;
-	int width;
-	int height;
-	int color;
-}	t_rect;
-
 //utils
-int		get_height(char *str);
-int		get_width(char *str);
+int		map_parse(t_xdata *data, char *file);
 int		ft_strlen(char *str);
 char	**ft_split(char const *s, char c);
 void	free_split(char **var);
-int		map_parse(t_xdata *data, t_map *MapCheck, char *file);
 int		gnl(int fd, char **str);
 int		ber_file(char *mapName, char *extension);
 int		close_window(t_xdata *param);
@@ -140,38 +110,15 @@ int		render(t_xdata *data);
 int		lowest_f(t_node *list, t_pos pos);
 int		lowest_h(t_node *list, t_pos pos, int Flow, int	Hlow);
 t_pos	get_pos(char **map, char c);
-// void	render_init(t_xdata *data)
+void	render_map(t_xdata *data);
+int		render(t_xdata *data);
 int		a_star(char **map, star_t star);
 int		empty_list(t_node *list, t_node default_node);
-void	free_map_list(t_node **map_node, star_t star, t_list **list);
+int		free_map_list(t_node **map_node, star_t star, t_list **list);
 void	add_list(t_list **list, t_node newnode);
 t_node	*find_lowestF(t_list **list);
 void	del_list(t_list **list);
+void	render_character(int keysym, t_xdata *prm);
+void	err_msg(char *emsg);
 
 #endif
-
-// typedef struct s_node{
-// 	int	visited;
-// 	int	wall;
-// 	int		x;
-// 	int		y;
-// 	int		f;
-// 	int		g;
-// 	int		h;
-// }			t_node;
-
-// typedef struct	s_star {
-// 	t_node	default_node;
-// 	t_node	start_node;
-// 	t_node	end_node;
-// 	t_node	current_node;
-// 	t_node	 map_nodes[64][64];
-// 	t_node	list[64];
-// 	int	distance;
-// }				star_t;
-
-
-// int	funct(star_t *star)
-// {
-// 	star->default_node = (t_node){false, false, 0,0,0,INT_MAX, INT_MAX};
-// }

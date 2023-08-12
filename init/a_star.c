@@ -67,7 +67,6 @@ int	main_algo(t_node **map_node, t_pos start, t_pos end, star_t star)
 	return (free_map_list(map_node, star, &list), 0);
 }
 
-
 t_node	**create_map(char **map, t_node **map_node, star_t star, t_node dflt)
 {
 	int	height;
@@ -75,10 +74,10 @@ t_node	**create_map(char **map, t_node **map_node, star_t star, t_node dflt)
  
 	height = 0;
 	width = 0;
-	map_node = malloc(sizeof(t_node **) * star.mapWL.y);
+	map_node = (t_node **)malloc(++star.mapWL.y * sizeof(t_node *));
 	while (map[height] != NULL)
 	{
-		map_node[height] = malloc(sizeof(t_node) * star.mapWL.x);
+		map_node[height] = (t_node *)malloc(++star.mapWL.x * sizeof(t_node));
 		while (map[height][width] != 0)
 		{
 			map_node[height][width] = dflt;
@@ -100,6 +99,7 @@ int	a_star(char **map, star_t star)
 	t_pos	start;
 	t_pos	end;
 
+	map_node = NULL;
 	map_node = create_map(map, map_node, star, (t_node){false, false, 0, 0,\
 	INT_MAX, INT_MAX, INT_MAX});
 	start = get_pos(map, 'P');

@@ -12,7 +12,7 @@
 
 CC			= gcc
 
-CFLAGS		= -g3 #-Werror -Wall -Wextra
+CFLAGS		= -g3 -Werror -Wall -Wextra
 
 INCLUDE		= -I ./minilibx-linux
 
@@ -20,7 +20,7 @@ NAME		= so_long
 
 LIBX		= -L ./minilibx-linux -lmlx -lm -lX11 -lXext
 
-SRCS		= map.c utils/utils.c utils/get_len.c utils/ft_split.c init/init.c\
+SRCS		= init/map.c utils/utils.c utils/ft_split.c init/init.c\
 			 init/hooks.c init/render.c init/a_star.c init/a_utils.c
 
 HEADER		= so_long.h

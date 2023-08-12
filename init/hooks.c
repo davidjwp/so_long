@@ -14,23 +14,99 @@
 
 int	close_window(t_xdata *param)
 {
-	// mlx_destroy_window(param->mlx_ptr, param->win_ptr);THIS is causing a segfault probaBLY Because it's not properly set
-	// param->win_ptr = NULL;dk if this does anything
 	mlx_loop_end(param->mlx_ptr);
 	return (0);
 }
 
-int	controls(int keysym, t_xdata *param)
+char	*itoa(int n, char *str)
+{
+	int	number;
+	int	i;
+
+	i = 0;
+	number = n;
+	while (number /= 10)
+		i++;
+	str = malloc((i + 2) * sizeof(char));
+	str[i+1] = 0;
+	while (i)
+	{
+		str[i--] = "0123456789"[n % 10];
+		n = n / 10;
+	}
+	str[i] = "0123456789"[n % 10];
+	return(str);
+}
+
+int	put_steps(t_xdata *prm, int keysym, t_pos cpos)
+{
+	char	*str;
+	int		steps;
+	int		size;
+
+	if ((keysym == XK_w && (prm->map[(cpos.y - 1) / S_BIT][cpos.x / S_BIT] == \
+	'1')) || (keysym == XK_s && prm->map[(cpos.y / S_BIT) + 1][cpos.x / S_BIT]\
+	== '1') || (keysym == XK_a && prm->map[cpos.y / S_BIT][(cpos.x - 1) / S_BIT\
+	] == '1') || (keysym ==	XK_d && prm->map[cpos.y / S_BIT][(cpos.x / S_BIT) +\
+	1] == '1'))
+		return (0);
+	prm->player.steps++;
+	size = 1;
+	str = NULL;
+	steps = prm->player.steps;
+	while (steps /= 10)
+		size++;
+	str = itoa(prm->player.steps, str);
+	write (1, "steps: ", 7);
+	write (1, str, size);
+	write (1, "\n", 1);
+	return (free(str), 0);
+}
+
+void	render_player(int keysym, t_xdata *prm)
+{
+	if (keysym == XK_w)
+		mlx_put_image_to_window(prm->mlx_ptr, prm->win_ptr,\
+		prm->player.up, prm->player.pos.x, prm->player.pos.y);
+	else if (keysym == XK_a)
+		mlx_put_image_to_window(prm->mlx_ptr, prm->win_ptr,\
+		prm->player.left, prm->player.pos.x, prm->player.pos.y);
+	else if (keysym == XK_s)
+		mlx_put_image_to_window(prm->mlx_ptr, prm->win_ptr,\
+		prm->player.down, prm->player.pos.x, prm->player.pos.y);
+	else if (keysym == XK_d)
+		mlx_put_image_to_window(prm->mlx_ptr, prm->win_ptr,\
+		prm->player.right, prm->player.pos.x, prm->player.pos.y);
+	if (prm->player.items == prm->Map.items &&\
+	prm->map[prm->player.pos.y / S_BIT][prm->player.pos.x / S_BIT] == 'E')
+		mlx_loop_end(prm->mlx_ptr);
+}
+
+int	controls(int keysym, t_xdata *prm)
 {
 	if (keysym == XK_Escape)
-		close_window(param);
-	else if (keysym == XK_w)
-		param->Ximg->character.pos.y -= BIT_SIZ;
-	else if (keysym == XK_a)
-		param->Ximg->character.pos.x -= BIT_SIZ;
-	else if (keysym == XK_s)
-		param->Ximg->character.pos.y += BIT_SIZ;
-	else if (keysym == XK_d)
-		param->Ximg->character.pos.x += BIT_SIZ;
+		close_window(prm);
+	put_steps(prm, keysym, prm->player.pos);
+	if (keysym != XK_w && keysym != XK_a && keysym != XK_s && keysym != XK_d)
+		return (0);
+	else if (keysym == XK_w && prm->map[(prm->player.pos.y - 1) / S_BIT]\
+	[prm->player.pos.x / S_BIT] != '1')
+		prm->player.pos.y -= S_BIT;
+	else if (keysym == XK_a && prm->map[prm->player.pos.y / S_BIT]\
+	[(prm->player.pos.x - 1) / S_BIT] != '1')
+		prm->player.pos.x -= S_BIT;
+	else if (keysym == XK_s && prm->map[(prm->player.pos.y / S_BIT) + 1]\
+	[prm->player.pos.x / S_BIT] != '1')
+		prm->player.pos.y += S_BIT;
+	else if (keysym == XK_d && prm->map[prm->player.pos.y / S_BIT]\
+	[(prm->player.pos.x / S_BIT) + 1] != '1')
+		prm->player.pos.x += S_BIT;
+	if (prm->map[prm->player.pos.y / S_BIT][prm->player.pos.x / S_BIT] == 'C')
+	{
+		prm->map[prm->player.pos.y / S_BIT][prm->player.pos.x / S_BIT] ='0';
+		prm->player.items++;
+	}
+	render_map(prm);
+	render_player(keysym, prm);
 	return (0);
 }

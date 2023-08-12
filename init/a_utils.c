@@ -66,7 +66,7 @@ void	add_list(t_list **list, t_node newnode)
 	t_list	*newlnode;
 	t_list	*tmp;
 
-	newlnode = (t_list *)malloc(sizeof(t_list));
+	newlnode = malloc(sizeof(t_list));
 	newlnode->node = newnode;
 	newlnode->next = NULL;
 	if (*list == NULL)
@@ -104,21 +104,25 @@ void	del_list(t_list **list)
 	}
 }
 
-void	free_map_list(t_node **map_node, star_t star, t_list **list)
+int	free_map_list(t_node **map_node, star_t star, t_list **list)
 {
-	int	i;
+	t_list	*mv;
+	int	y;
 
-	i = 0;
-	while (star.mapWL.y)
+	y = 0;
+	while (star.mapWL.y--)
 	{
-		free(map_node[i]);
-		star.mapWL.y--;
-		i++;
+		free(map_node[y]);
+		y++;
 	}
 	free(map_node);
+	if (*list == NULL)
+		return (0);
 	while ((*list)->next != NULL)
 	{
+		mv = (*list)->next;
 		free(*list);
-		*list = (*list)->next;
+		*list = mv;
 	}
+	return (free(*list), 0);
 }
