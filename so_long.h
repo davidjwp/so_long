@@ -25,11 +25,6 @@
 
 # define true 1
 # define false 0
-# define RED 0XFF0000
-# define GREEN 0X00FF00
-# define WHITE 0XFFFFFF
-# define WIN_WIDTH 720
-# define WIN_HEIGHT 480
 # define IMG_WIDTH 32
 # define IMG_HEIGHT 32
 # define S_BIT	32
@@ -62,8 +57,8 @@ typedef struct	s_map {
 	int	walls[4];
 } 				t_map;
 
-typedef struct s_char
-{
+typedef struct	s_char {
+	void	*img;
 	void	*up;
 	void	*down;
 	void	*left;
@@ -72,7 +67,6 @@ typedef struct s_char
 	int		items;
 	int		steps;
 }				t_char;
-
 
 typedef struct	s_xdata {
 	void	*mlx_ptr;

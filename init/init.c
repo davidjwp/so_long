@@ -66,6 +66,7 @@ void	destroy_all(t_xdata data)
 	free(data.mlx_ptr);
 }
 
+//make sure to free data.map
 int main(int argc, char **argv)
 {
 	t_xdata data;

@@ -39,7 +39,7 @@ void render_map(t_xdata *data)
 	data->pos.y = 0;
 	if (data->map[data->player.pos.y / S_BIT][data->player.pos.x / S_BIT]\
 	 == 'C')
-	data->map[data->player.pos.y / S_BIT][data->player.pos.x / S_BIT] ='0';
+	data->map[data->player.pos.y / S_BIT][data->player.pos.x / S_BIT] = '0';
 	while (data->map[y] != NULL)
 	{
 		while (data->map[y][x] != 0)

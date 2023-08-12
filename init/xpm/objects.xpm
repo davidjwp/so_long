@@ -1,4 +1,5 @@
 /* XPM */
+<<<<<<< HEAD
 static char *_87081a8472e448bda8bc4588506c8f9xIachBHTNZ6tdo5b[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 8 1 ",
@@ -43,4 +44,49 @@ static char *_87081a8472e448bda8bc4588506c8f9xIachBHTNZ6tdo5b[] = {
 "++++++++++++++++++++++++++++++++",
 "++++++++++++++++++++++++++++++++",
 "++++++++++++++++++++++++++++++++"
+=======
+static char *cd7069ae8c3d4b5facefb0072fa65d5dqZ4TGBDQu22sDUEg[] = {
+/* columns rows colors chars-per-pixel */
+"32 32 7 1 ",
+"  c None",
+". c #423934",
+"X c #8E5252",
+"o c #BA756A",
+"O c #A08662",
+"+ c #C7B08B",
+"@ c #E4D2AA",
+/* pixels */
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"               ...              ",
+"              .ooo.             ",
+"             .ooooo.            ",
+"            .ooooo@o.           ",
+"           .X@ooooooX.          ",
+"           .XXoo@ooXX.          ",
+"            .XXXXXXX.           ",
+"             .......            ",
+"              .+OO.             ",
+"             .++++O.            ",
+"              .+++.             ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                "
+>>>>>>> 380955d960355f034569f11ef801b77c70f26a14
 };
