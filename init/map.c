@@ -12,7 +12,8 @@
 
 #include "../so_long.h"
 
-t_pos	get_map_LW(char	**map)
+/*get map Length and Width*/
+t_pos	get_map_lw(char	**map)
 {
 	int	x;
 	int	y;
@@ -33,10 +34,7 @@ int	is_map(char c)
 	return (0);
 }
 
-/*
-** checks that the walls are not missing, are the proper length and that the
-** map isn't a square
-*/
+/*check map walls for holes and shape*/
 int	map_walls(char **map, t_pos pos, int y, int x)
 {
 	int	wall;
@@ -51,7 +49,7 @@ int	map_walls(char **map, t_pos pos, int y, int x)
 				wall++;
 			x++;
 		}
-		if ((wall != pos.x && (y == 0 || y == pos.y)) ||\
+		if ((wall != pos.x && (y == 0 || y == pos.y)) || \
 		(x != pos.x || (map[y][x] != '1' && map[y][0] != '1')))
 			return (err_msg("broken walls"), 0);
 		x = 0;
@@ -62,9 +60,7 @@ int	map_walls(char **map, t_pos pos, int y, int x)
 	return (1);
 }
 
-/*
-** check for missing elements and walls
-*/
+/*check for missing element*/
 int	map_check(t_map *MapCheck, char *map, char **map_split)
 {
 	int	i;
@@ -82,19 +78,20 @@ int	map_check(t_map *MapCheck, char *map, char **map_split)
 			MapCheck->character++;
 		i++;
 	}
-	if ((MapCheck->exit < 1 || !MapCheck->exit) ||\
-	(MapCheck->character > 1 || !MapCheck->character) ||\
+	if ((MapCheck->exit < 1 || !MapCheck->exit) || \
+	(MapCheck->character > 1 || !MapCheck->character) || \
 	MapCheck->items < 1)
 		return (err_msg("bad item or character or exit"), 0);
-	if (!map_walls(map_split, get_map_LW(map_split), 0, 0))
+	if (!map_walls(map_split, get_map_lw(map_split), 0, 0))
 		return (0);
 	return (1);
 }
 
 /*
-** map_parse contains all the other map parsing utilities, first i open the
-** the file and read it, with gnl this way i have the whole map in an array
-** and everytime it is more conveniant to split it i use ft_split
+*	this function checks for the proper extension, that the files exists
+*	then it'll check all the elements, for proper shape, that there is no hole
+*	or that there is no stray walls, then it checks for the length and width
+*	so that the map isn't too big
 */
 int	map_parse(t_xdata *data, char *file)
 {
@@ -102,24 +99,24 @@ int	map_parse(t_xdata *data, char *file)
 
 	if (!ber_file(file, ".ber"))
 		return (err_msg("wrong file type"), 0);
-	data->Map = (t_map){0, 0, 0, 0, {0, 0, 0,0}};
-	data->Map.fd = open( file, 0);
-	if (data->Map.fd < 0)
+	data->mp = (t_map){0, 0, 0, 0, {0, 0, 0, 0}};
+	data->mp.fd = open(file, 0);
+	if (data->mp.fd < 0)
 		return (err_msg("no fd"), 0);
-	gnl(data->Map.fd, &map);
+	gnl(data->mp.fd, &map);
 	if (map == NULL)
-		return (close(data->Map.fd), err_msg("empty file"), 0);
+		return (close(data->mp.fd), err_msg("empty file"), 0);
 	data->map = ft_split(map, '\n');
-	if (!map_check(&data->Map, map, data->map))
-		return (free(map), close(data->Map.fd), free_split(data->map), 0);
-	data->WinWL = get_map_LW(data->map);
-	if (ft_strlen(data->map[0]) >= 64)
-		return (err_msg("map too big"), free(map),\
-		free_split(data->map), close(data->Map.fd), 0);
-	if (!a_star(data->map, (star_t){get_pos(data->map, 'P'),\
-	get_pos(data->map,'E'), data->WinWL, 0}))
-		return(err_msg("wrong path"), free(map), free_split(data->map),\
-		close(data->Map.fd), 0);
+	if (!map_check(&data->mp, map, data->map))
+		return (free(map), close(data->mp.fd), free_split(data->map), 0);
+	data->win_wl = get_map_lw(data->map);
+	if (data->win_wl.x >= 64 || data->win_wl.y >= 42)
+		return (err_msg("map too big"), free(map), \
+		free_split(data->map), close(data->mp.fd), 0);
+	if (!a_star(data->map, (t_star){get_pos(data->map, 'P'), \
+	get_pos(data->map, 'E'), data->win_wl, 0}))
+		return (err_msg("wrong path"), free(map), free_split(data->map), \
+		close(data->mp.fd), 0);
 	data->player.pos = get_pos(data->map, 'P');
-	return (free(map), close(data->Map.fd), 1);
+	return (free(map), close(data->mp.fd), 1);
 }

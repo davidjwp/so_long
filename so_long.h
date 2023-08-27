@@ -23,15 +23,15 @@
 # include <fcntl.h>
 # include <limits.h>
 
-# define true 1
-# define false 0
+# define TRUE 1
+# define FALSE 0
 # define IMG_WIDTH 32
 # define IMG_HEIGHT 32
 # define S_BIT	32
 
 typedef struct s_pos{
-	int y;
-	int x;
+	int	y;
+	int	x;
 }			t_pos;
 
 typedef struct s_node{
@@ -45,19 +45,19 @@ typedef struct s_node{
 }			t_node;
 
 typedef struct s_list {
-	t_node	node;
+	t_node			node;
 	struct s_list	*next;
 }			t_list;
 
-typedef struct	s_map {
+typedef struct s_map {
 	int	fd;
 	int	exit;
 	int	items;
 	int	character;
 	int	walls[4];
-} 				t_map;
+}				t_map;
 
-typedef struct	s_char {
+typedef struct s_char {
 	void	*img;
 	void	*up;
 	void	*down;
@@ -68,7 +68,7 @@ typedef struct	s_char {
 	int		steps;
 }				t_char;
 
-typedef struct	s_xdata {
+typedef struct s_xdata {
 	void	*mlx_ptr;
 	void	*win_ptr;
 	void	*img_ptr;
@@ -80,16 +80,16 @@ typedef struct	s_xdata {
 	t_char	player;
 	t_pos	pos;
 	t_pos	img_siz;
-	t_pos	WinWL;
-	t_map	Map;
+	t_pos	win_wl;
+	t_map	mp;
 }				t_xdata;
 
-typedef	struct star_s {
+typedef struct star_s {
 	t_pos	start;
 	t_pos	end;
-	t_pos	mapWL;
-	int	distance;
-}		star_t;
+	t_pos	mapwl;
+	int		distance;
+}				t_star;
 
 //utils
 int		map_parse(t_xdata *data, char *file);
@@ -102,15 +102,15 @@ int		close_window(t_xdata *param);
 int		controls(int keysym, t_xdata *param);
 int		render(t_xdata *data);
 int		lowest_f(t_node *list, t_pos pos);
-int		lowest_h(t_node *list, t_pos pos, int Flow, int	Hlow);
+int		lowest_h(t_node *list, t_pos pos, int Flow, int Hlow);
 t_pos	get_pos(char **map, char c);
 void	render_map(t_xdata *data);
 int		render(t_xdata *data);
-int		a_star(char **map, star_t star);
+int		a_star(char **map, t_star star);
 int		empty_list(t_node *list, t_node default_node);
-int		free_map_list(t_node **map_node, star_t star, t_list **list);
+int		free_map_list(t_node **map_node, t_star star, t_list **list);
 void	add_list(t_list **list, t_node newnode);
-t_node	*find_lowestF(t_list **list);
+t_node	*find_lowestf(t_list **list);
 void	del_list(t_list **list);
 void	render_character(int keysym, t_xdata *prm);
 void	err_msg(char *emsg);

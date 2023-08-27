@@ -25,17 +25,20 @@ char	*itoa(int n, char *str)
 
 	i = 0;
 	number = n;
-	while (number /= 10)
+	while (number / 10)
+	{
+		number /= 10;
 		i++;
+	}
 	str = malloc((i + 2) * sizeof(char));
-	str[i+1] = 0;
+	str[i + 1] = 0;
 	while (i)
 	{
 		str[i--] = "0123456789"[n % 10];
 		n = n / 10;
 	}
 	str[i] = "0123456789"[n % 10];
-	return(str);
+	return (str);
 }
 
 int	put_steps(t_xdata *prm, int keysym, t_pos cpos)
@@ -45,17 +48,20 @@ int	put_steps(t_xdata *prm, int keysym, t_pos cpos)
 	int		size;
 
 	if ((keysym == XK_w && (prm->map[(cpos.y - 1) / S_BIT][cpos.x / S_BIT] == \
-	'1')) || (keysym == XK_s && prm->map[(cpos.y / S_BIT) + 1][cpos.x / S_BIT]\
-	== '1') || (keysym == XK_a && prm->map[cpos.y / S_BIT][(cpos.x - 1) / S_BIT\
-	] == '1') || (keysym ==	XK_d && prm->map[cpos.y / S_BIT][(cpos.x / S_BIT) +\
+	'1')) || (keysym == XK_s && prm->map[(cpos.y / S_BIT) + 1][cpos.x / S_BIT] \
+	== '1') || (keysym == XK_a && prm->map[cpos.y / S_BIT][(cpos.x - 1) / S_BIT \
+	] == '1') || (keysym == XK_d && prm->map[cpos.y / S_BIT][(cpos.x / S_BIT) + \
 	1] == '1'))
 		return (0);
 	prm->player.steps++;
 	size = 1;
 	str = NULL;
 	steps = prm->player.steps;
-	while (steps /= 10)
+	while (steps / 10)
+	{
+		steps /= 10;
 		size++;
+	}
 	str = itoa(prm->player.steps, str);
 	write (1, "steps: ", 7);
 	write (1, str, size);
@@ -66,18 +72,18 @@ int	put_steps(t_xdata *prm, int keysym, t_pos cpos)
 void	render_player(int keysym, t_xdata *prm)
 {
 	if (keysym == XK_w)
-		mlx_put_image_to_window(prm->mlx_ptr, prm->win_ptr,\
+		mlx_put_image_to_window(prm->mlx_ptr, prm->win_ptr, \
 		prm->player.up, prm->player.pos.x, prm->player.pos.y);
 	else if (keysym == XK_a)
-		mlx_put_image_to_window(prm->mlx_ptr, prm->win_ptr,\
+		mlx_put_image_to_window(prm->mlx_ptr, prm->win_ptr, \
 		prm->player.left, prm->player.pos.x, prm->player.pos.y);
 	else if (keysym == XK_s)
-		mlx_put_image_to_window(prm->mlx_ptr, prm->win_ptr,\
+		mlx_put_image_to_window(prm->mlx_ptr, prm->win_ptr, \
 		prm->player.down, prm->player.pos.x, prm->player.pos.y);
 	else if (keysym == XK_d)
-		mlx_put_image_to_window(prm->mlx_ptr, prm->win_ptr,\
+		mlx_put_image_to_window(prm->mlx_ptr, prm->win_ptr, \
 		prm->player.right, prm->player.pos.x, prm->player.pos.y);
-	if (prm->player.items == prm->Map.items &&\
+	if (prm->player.items == prm->mp.items && \
 	prm->map[prm->player.pos.y / S_BIT][prm->player.pos.x / S_BIT] == 'E')
 		mlx_loop_end(prm->mlx_ptr);
 }
@@ -86,27 +92,26 @@ int	controls(int keysym, t_xdata *prm)
 {
 	if (keysym == XK_Escape)
 		close_window(prm);
-	put_steps(prm, keysym, prm->player.pos);
+	if (keysym == XK_w || keysym == XK_a || keysym == XK_d || keysym == XK_s)
+		put_steps(prm, keysym, prm->player.pos);
 	if (keysym != XK_w && keysym != XK_a && keysym != XK_s && keysym != XK_d)
 		return (0);
-	else if (keysym == XK_w && prm->map[(prm->player.pos.y - 1) / S_BIT]\
+	else if (keysym == XK_w && prm->map[(prm->player.pos.y - 1) / S_BIT] \
 	[prm->player.pos.x / S_BIT] != '1')
 		prm->player.pos.y -= S_BIT;
-	else if (keysym == XK_a && prm->map[prm->player.pos.y / S_BIT]\
+	else if (keysym == XK_a && prm->map[prm->player.pos.y / S_BIT] \
 	[(prm->player.pos.x - 1) / S_BIT] != '1')
 		prm->player.pos.x -= S_BIT;
-	else if (keysym == XK_s && prm->map[(prm->player.pos.y / S_BIT) + 1]\
+	else if (keysym == XK_s && prm->map[(prm->player.pos.y / S_BIT) + 1] \
 	[prm->player.pos.x / S_BIT] != '1')
 		prm->player.pos.y += S_BIT;
-	else if (keysym == XK_d && prm->map[prm->player.pos.y / S_BIT]\
+	else if (keysym == XK_d && prm->map[prm->player.pos.y / S_BIT] \
 	[(prm->player.pos.x / S_BIT) + 1] != '1')
 		prm->player.pos.x += S_BIT;
 	if (prm->map[prm->player.pos.y / S_BIT][prm->player.pos.x / S_BIT] == 'C')
 	{
-		prm->map[prm->player.pos.y / S_BIT][prm->player.pos.x / S_BIT] ='0';
+		prm->map[prm->player.pos.y / S_BIT][prm->player.pos.x / S_BIT] = '0';
 		prm->player.items++;
 	}
-	render_map(prm);
-	render_player(keysym, prm);
-	return (0);
+	return (render_map(prm), render_player(keysym, prm), 0);
 }

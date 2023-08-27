@@ -68,7 +68,7 @@ char	**ft_split(char const *s, char c)
 		if (*s)
 			split[index] = ft_word_cpy(s, c);
 		if (*s == 10 && !s[1])
-			break;
+			break ;
 		index++;
 		while (*s != c && *s)
 			s++;

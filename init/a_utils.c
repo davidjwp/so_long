@@ -12,32 +12,32 @@
 
 #include "../so_long.h"
 
-t_node	*find_lowestF(t_list **list)
+t_node	*find_lowestf(t_list **list)
 {
-	t_node	*lowestFnode;
+	t_node	*lowestfnode;
 	t_list	*current;
-	int	lowestH;
+	int		lowesth;
 
-	lowestFnode = &(*list)->node;
+	lowestfnode = &(*list)->node;
 	current = *list;
 	while (current != NULL)
 	{
-		if (current->node.f < lowestFnode->f)
-			lowestFnode = &current->node;
+		if (current->node.f < lowestfnode->f)
+			lowestfnode = &current->node;
 		current = current->next;
 	}
 	current = *list;
-	lowestH = INT_MAX;
+	lowesth = INT_MAX;
 	while (current != NULL)
 	{
-		if (current->node.f == lowestFnode->f && current->node.h < lowestH)
+		if (current->node.f == lowestfnode->f && current->node.h < lowesth)
 		{
-			lowestFnode = &current->node;
-			lowestH = lowestFnode->h;
+			lowestfnode = &current->node;
+			lowesth = lowestfnode->h;
 		}
 		current = current->next;
 	}
-	return (lowestFnode);
+	return (lowestfnode);
 }
 
 t_pos	get_pos(char **map, char c)
@@ -87,7 +87,7 @@ void	del_list(t_list **list)
 
 	link = NULL;
 	head = *list;
-	if (head->node.visited == true)
+	if (head->node.visited == TRUE)
 	{
 		link = (*list)->next;
 		free(*list);
@@ -95,7 +95,7 @@ void	del_list(t_list **list)
 	}
 	else
 	{
-		while (head->next->node.visited != true && head->next->next != NULL)
+		while (head->next->node.visited != TRUE && head->next->next != NULL)
 			head = head->next;
 		if (head->next->next != NULL)
 			link = head->next->next;
@@ -104,13 +104,13 @@ void	del_list(t_list **list)
 	}
 }
 
-int	free_map_list(t_node **map_node, star_t star, t_list **list)
+int	free_map_list(t_node **map_node, t_star star, t_list **list)
 {
 	t_list	*mv;
-	int	y;
+	int		y;
 
 	y = 0;
-	while (star.mapWL.y--)
+	while (star.mapwl.y--)
 	{
 		free(map_node[y]);
 		y++;

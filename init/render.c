@@ -15,20 +15,20 @@
 void	render_unit(t_xdata *data, char pos)
 {
 	if (pos == '1')
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,\
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, \
 		data->wall, data->pos.x, data->pos.y);
 	else if (pos == '0' || pos == 'P')
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,\
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, \
 		data->background, data->pos.x, data->pos.y);
 	else if (pos == 'E')
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,\
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, \
 		data->exit, data->pos.x, data->pos.y);
 	else if (pos == 'C')
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,\
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, \
 		data->item, data->pos.x, data->pos.y);
 }
 
-void render_map(t_xdata *data)
+void	render_map(t_xdata *data)
 {
 	int	x;
 	int	y;
@@ -37,8 +37,8 @@ void render_map(t_xdata *data)
 	y = 0;
 	data->pos.x = 0;
 	data->pos.y = 0;
-	if (data->map[data->player.pos.y / S_BIT][data->player.pos.x / S_BIT]\
-	 == 'C')
+	if (data->map[data->player.pos.y / S_BIT][data->player.pos.x / S_BIT] \
+	== 'C')
 	data->map[data->player.pos.y / S_BIT][data->player.pos.x / S_BIT] = '0';
 	while (data->map[y] != NULL)
 	{

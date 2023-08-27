@@ -45,6 +45,8 @@ int	gnl(int fd, char **str)
 	i = 0;
 	buf = malloc(sizeof(char) * BUFSIZ);
 	n = read(fd, &c, 1);
+	if (n == 0)
+		return (free(buf), *str == NULL);
 	if (c == '\n')
 		return (free(buf), *str == NULL);
 	if (n)
@@ -59,9 +61,7 @@ int	gnl(int fd, char **str)
 		i++;
 	}
 	buf[i - 1] = 0;
-	buf[BUFSIZ - 1] = 0;
-	*str = buf;
-	return (1);
+	return (buf[BUFSIZ - 1] = 0, *str = buf, 1);
 }
 
 int	ber_file(char *mapName, char *extension)
