@@ -61,12 +61,14 @@ t_pos	get_pos(char **map, char c)
 	return ((t_pos){0, 0});
 }
 
-void	add_list(t_list **list, t_node newnode)
+int	add_list(t_list **list, t_node newnode)
 {
 	t_list	*newlnode;
 	t_list	*tmp;
 
 	newlnode = malloc(sizeof(t_list));
+	if (newlnode == NULL)
+		return (0);
 	newlnode->node = newnode;
 	newlnode->next = NULL;
 	if (*list == NULL)
@@ -78,6 +80,7 @@ void	add_list(t_list **list, t_node newnode)
 			tmp = tmp->next;
 		tmp->next = newlnode;
 	}
+	return (1);
 }
 
 void	del_list(t_list **list)

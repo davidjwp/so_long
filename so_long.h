@@ -28,6 +28,7 @@
 # define IMG_WIDTH 32
 # define IMG_HEIGHT 32
 # define S_BIT	32
+# define ERROR_FT_CPY ((void *)1)
 
 typedef struct s_pos{
 	int	y;
@@ -96,7 +97,7 @@ int		map_parse(t_xdata *data, char *file);
 int		ft_strlen(char *str);
 char	**ft_split(char const *s, char c);
 void	free_split(char **var);
-int		gnl(int fd, char **str);
+int		gnl(int fd, char **str, int i);
 int		ber_file(char *mapName, char *extension);
 int		close_window(t_xdata *param);
 int		controls(int keysym, t_xdata *param);
@@ -109,10 +110,11 @@ int		render(t_xdata *data);
 int		a_star(char **map, t_star star);
 int		empty_list(t_node *list, t_node default_node);
 int		free_map_list(t_node **map_node, t_star star, t_list **list);
-void	add_list(t_list **list, t_node newnode);
+int		add_list(t_list **list, t_node newnode);
 t_node	*find_lowestf(t_list **list);
 void	del_list(t_list **list);
 void	render_character(int keysym, t_xdata *prm);
 void	err_msg(char *emsg);
+void	clean_map(t_node **map_node);
 
 #endif

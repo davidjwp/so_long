@@ -34,7 +34,7 @@ int	is_map(char c)
 	return (0);
 }
 
-/*check map walls for holes and shape*/
+/*check map walls for holes and shape
 int	map_walls(char **map, t_pos pos, int y, int x)
 {
 	int	wall;
@@ -52,12 +52,78 @@ int	map_walls(char **map, t_pos pos, int y, int x)
 		if ((wall != pos.x && (y == 0 || y == pos.y)) || \
 		(x != pos.x || (map[y][x] != '1' && map[y][0] != '1')))
 			return (err_msg("broken walls"), 0);
+		if ((wall != pos.x && (y == 0 || y == pos.y)) || (y == pos.y - 1 && wall == ((pos.y - 2) * 2)) || x != pos.x )
+
 		x = 0;
 		y++;
 	}
 	if (pos.x == pos.y)
 		return (err_msg("map is square"), 0);
 	return (1);
+}
+*/
+
+// pos.y should always be the last line pos.y -1 should always be the line before that, ft_split should always ignore \n
+/*
+int	map_walls(char **map, t_pos pos, int y, int x)
+{
+	int	wall;
+
+	wall = 0;
+	if (pos.x == pos.y)
+		return (err_msg("map is square"), 0);
+	while (map[y] != NULL)
+	{
+		if (y <= 1 || y == pos.y)
+			wall = 0;
+		while (map[y][x] != 0)
+		{
+			if (map[y][x] == '1')
+				wall++;
+			x++;
+		}
+		if (((y == 0 || y == pos.y) && wall != pos.x) || (y == pos.y - 2 && \
+		wall != ((pos.y - 2) * 2)) || x != pos.x)
+			return (err_msg("broken walls"), 0);
+		x = 0;
+		y++;
+	}
+	return (1);
+}
+*/
+
+// int	map_walls(char **map, t_pos pos, int y, int x)
+// {
+// 	while (map[y] != NULL)
+// 	{
+// 		while (map[0][x] == '1')
+// 			x++;
+// 		if (x != pos.x)
+// 			return (err_msg("wrong top wall"), 0);
+// 		x = 0;
+// 		while (map[pos.y - 1][x] == '1')
+// 			x++;
+// 		if (x != pos.x)
+// 			return (err_msg("wrong top wall"), 0);
+// 	}
+// }
+
+
+int	map_walls(char **map, t_pos pos, int y, int x)
+{
+	if (pos.y == pos.x)
+		return(err_msg("map is square"), 0);
+    while (x < pos.x) {
+        if (map[0][x] != '1' || map[pos.y - 1][x] != '1')
+            return (err_msg("broken walls on top/bottom"), 0);
+        x++;
+    }
+    while (y < pos.y) {
+        if (map[y][0] != '1' || map[y][pos.x - 1] != '1')
+            return (err_msg("broken walls on left/right"), 0);
+        y++;
+    }
+    return (1);
 }
 
 /*check for missing element*/
@@ -69,7 +135,7 @@ int	map_check(t_map *MapCheck, char *map, char **map_split)
 	while (map[i] != 0)
 	{
 		if (!is_map(map[i]))
-			return (0);
+			return (err_msg("bad character"), 0);
 		if (map[i] == 'C')
 			MapCheck->items++;
 		else if (map[i] == 'E')
@@ -78,9 +144,8 @@ int	map_check(t_map *MapCheck, char *map, char **map_split)
 			MapCheck->character++;
 		i++;
 	}
-	if ((MapCheck->exit < 1 || !MapCheck->exit) || \
-	(MapCheck->character > 1 || !MapCheck->character) || \
-	MapCheck->items < 1)
+	if ((MapCheck->exit != 1) || (MapCheck->character > 1 || \
+	!MapCheck->character) || MapCheck->items < 1)
 		return (err_msg("bad item or character or exit"), 0);
 	if (!map_walls(map_split, get_map_lw(map_split), 0, 0))
 		return (0);
@@ -103,10 +168,12 @@ int	map_parse(t_xdata *data, char *file)
 	data->mp.fd = open(file, 0);
 	if (data->mp.fd < 0)
 		return (err_msg("no fd"), 0);
-	gnl(data->mp.fd, &map);
+	gnl(data->mp.fd, &map, 0);
 	if (map == NULL)
 		return (close(data->mp.fd), err_msg("empty file"), 0);
 	data->map = ft_split(map, '\n');
+	if (data->map == NULL)
+		return (close(data->mp.fd), 0);
 	if (!map_check(&data->mp, map, data->map))
 		return (free(map), close(data->mp.fd), free_split(data->map), 0);
 	data->win_wl = get_map_lw(data->map);
@@ -115,8 +182,7 @@ int	map_parse(t_xdata *data, char *file)
 		free_split(data->map), close(data->mp.fd), 0);
 	if (!a_star(data->map, (t_star){get_pos(data->map, 'P'), \
 	get_pos(data->map, 'E'), data->win_wl, 0}))
-		return (err_msg("wrong path"), free(map), free_split(data->map), \
-		close(data->mp.fd), 0);
+		return (free(map), free_split(data->map), close(data->mp.fd), 0);
 	data->player.pos = get_pos(data->map, 'P');
 	return (free(map), close(data->mp.fd), 1);
 }

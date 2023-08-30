@@ -35,15 +35,15 @@ void	free_split(char **var)
 	free(var);
 }
 
-int	gnl(int fd, char **str)
+int	gnl(int fd, char **str, int i)
 {
 	char	*buf;
 	char	c;
 	int		n;
-	int		i;
 
-	i = 0;
 	buf = malloc(sizeof(char) * BUFSIZ);
+	if (buf == NULL)
+		return (*str == NULL);
 	n = read(fd, &c, 1);
 	if (n == 0)
 		return (free(buf), *str == NULL);
@@ -60,8 +60,7 @@ int	gnl(int fd, char **str)
 			buf[i] = c;
 		i++;
 	}
-	buf[i - 1] = 0;
-	return (buf[BUFSIZ - 1] = 0, *str = buf, 1);
+	return (buf[i - 1] = 0, buf[BUFSIZ - 1] = 0, *str = buf, 1);
 }
 
 int	ber_file(char *mapName, char *extension)

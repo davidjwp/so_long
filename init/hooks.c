@@ -31,6 +31,8 @@ char	*itoa(int n, char *str)
 		i++;
 	}
 	str = malloc((i + 2) * sizeof(char));
+	if (str == NULL)
+		return (NULL);
 	str[i + 1] = 0;
 	while (i)
 	{
@@ -63,10 +65,11 @@ int	put_steps(t_xdata *prm, int keysym, t_pos cpos)
 		size++;
 	}
 	str = itoa(prm->player.steps, str);
+	if (str == NULL)
+		return (err_msg("hooks itoa malloc fail"), \
+		mlx_loop_end(prm->mlx_ptr), 0);
 	write (1, "steps: ", 7);
-	write (1, str, size);
-	write (1, "\n", 1);
-	return (free(str), 0);
+	return (write (1, str, size), write (1, "\n", 1), free(str), 0);
 }
 
 void	render_player(int keysym, t_xdata *prm)

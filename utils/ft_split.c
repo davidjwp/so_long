@@ -23,6 +23,8 @@ static char	*ft_word_cpy(char const *s, char c)
 	while (s[word_len] != c && s[word_len])
 		word_len++;
 	word_cpy = (char *)malloc(word_len + 1);
+	if (word_cpy == NULL)
+		return (err_msg("split word copy fail"), ERROR_FT_CPY);
 	while (index < word_len)
 	{
 		word_cpy[index] = s[index];
@@ -59,20 +61,21 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	split = (char **)malloc(sizeof (char *) * (ft_word_count(s, c) + 1));
-	if (!split)
-		return (NULL);
+	if (split == NULL)
+		return (err_msg("split malloc fail"), NULL);
 	while (*s)
 	{
+		if (*s == 10 && !s[1])
+			break ;
 		while (*s == c && *s)
 			s++;
 		if (*s)
 			split[index] = ft_word_cpy(s, c);
-		if (*s == 10 && !s[1])
-			break ;
+		if (split[index] == ERROR_FT_CPY)
+			return (free_split(split), NULL);
 		index++;
 		while (*s != c && *s)
 			s++;
 	}
-	split[index] = NULL;
-	return (split);
+	return (split[index] = NULL, split);
 }

@@ -23,26 +23,33 @@ int	update_node(t_node node, t_list *list, t_star star)
 	while (current != NULL)
 	{
 		if (current->node.x == node.x && current->node.y == node.y)
-			return (0);
+			return (1);
 		current = current->next;
 	}
-	return (add_list(&list, node), 0);
+	if (!add_list(&list, node))
+		return (0);
+	return (1);
 }
 
-void	calc_nodes(t_node **mnodes, t_list *lst, t_node *cnode, t_star star)
+int	calc_nodes(t_node **mnodes, t_list *lst, t_node *cnode, t_star star)
 {
 	if (mnodes[cnode->y + 1][cnode->x].wall == FALSE && \
 	mnodes[cnode->y + 1][cnode->x].visited != TRUE)
-		update_node(mnodes[cnode->y + 1][cnode->x], lst, star);
+		if (!update_node(mnodes[cnode->y + 1][cnode->x], lst, star))
+			return (err_msg("a_star add_list in update_node fail"), 0);
 	if (mnodes[cnode->y - 1][cnode->x].wall == FALSE && \
 	mnodes[cnode->y - 1][cnode->x].visited != TRUE)
-		update_node(mnodes[cnode->y - 1][cnode->x], lst, star);
+		if (!update_node(mnodes[cnode->y - 1][cnode->x], lst, star))
+			return (err_msg("a_star add_list in update_node fail"), 0);
 	if (mnodes[cnode->y][cnode->x + 1].wall == FALSE && \
 	mnodes[cnode->y][cnode->x + 1].visited != TRUE)
-		update_node(mnodes[cnode->y][cnode->x + 1], lst, star);
+		if (!update_node(mnodes[cnode->y][cnode->x + 1], lst, star))
+			return (err_msg("a_star add_list in update_node fail"), 0);
 	if (mnodes[cnode->y][cnode->x - 1].wall == FALSE && \
 	mnodes[cnode->y][cnode->x - 1].visited != TRUE)
-		update_node(mnodes[cnode->y][cnode->x - 1], lst, star);
+		if (!update_node(mnodes[cnode->y][cnode->x - 1], lst, star))
+			return (err_msg("a_star add_list in update_node fail"), 0);
+	return (1);
 }
 
 int	main_algo(t_node **map_node, t_pos start, t_pos end, t_star star)
@@ -51,7 +58,8 @@ int	main_algo(t_node **map_node, t_pos start, t_pos end, t_star star)
 	t_list	*list;
 
 	list = NULL;
-	add_list(&list, map_node[start.y][start.x]);
+	if (!add_list(&list, map_node[start.y][start.x]))
+		return (err_msg("a_star add_list malloc fail"), 0);
 	while (list != NULL)
 	{
 		if (list == NULL)
@@ -61,34 +69,38 @@ int	main_algo(t_node **map_node, t_pos start, t_pos end, t_star star)
 		map_node[currentnode->y][currentnode->x].visited = TRUE;
 		if (currentnode->x == end.x && currentnode->y == end.y)
 			return (free_map_list(map_node, star, &list), 1);
-		calc_nodes(map_node, list, currentnode, star);
+		if (!calc_nodes(map_node, list, currentnode, star))
+			return (free_map_list(map_node, star, &list), 0);
 		del_list(&list);
 	}
-	return (free_map_list(map_node, star, &list), 0);
+	return (free_map_list(map_node, star, &list), err_msg("no path"), 0);
 }
 
 t_node	**create_map(char **map, t_node **map_node, t_star star, t_node dflt)
 {
-	int	height;
-	int	width;
+	t_pos	hw;
 
-	height = 0;
-	width = 0;
+	hw.y = 0;
+	hw.x = 0;
 	map_node = (t_node **)malloc(++star.mapwl.y * sizeof(t_node *));
-	while (map[height] != NULL)
+	if (map_node == NULL)
+		return (map_node);
+	while (map[hw.y] != NULL)
 	{
-		map_node[height] = (t_node *)malloc(++star.mapwl.x * sizeof(t_node));
-		while (map[height][width] != 0)
+		map_node[hw.y] = (t_node *)malloc(++star.mapwl.x * sizeof(t_node));
+		if (map_node[hw.y] == NULL)
+			return (clean_map(map_node), map_node);
+		while (map[hw.y][hw.x] != 0)
 		{
-			map_node[height][width] = dflt;
-			map_node[height][width].x = width;
-			map_node[height][width].y = height;
-			if (map[height][width] == '1')
-				map_node[height][width].wall = TRUE;
-			width++;
+			map_node[hw.y][hw.x] = dflt;
+			map_node[hw.y][hw.x].x = hw.x;
+			map_node[hw.y][hw.x].y = hw.y;
+			if (map[hw.y][hw.x] == '1')
+				map_node[hw.y][hw.x].wall = TRUE;
+			hw.x++;
 		}
-		height++;
-		width = 0;
+		hw.y++;
+		hw.x = 0;
 	}
 	return (map_node);
 }
@@ -102,14 +114,16 @@ int	a_star(char **map, t_star star)
 	map_node = NULL;
 	map_node = create_map(map, map_node, star, (t_node){FALSE, FALSE, 0, 0, \
 	INT_MAX, INT_MAX, INT_MAX});
+	if (map_node == NULL)
+		return (err_msg("a_star malloc fail"), 0);
 	start = get_pos(map, 'P');
 	end = get_pos(map, 'E');
 	map_node[start.y][start.x].f = 0;
 	map_node[start.y][start.x].g = 0;
 	map_node[start.y][start.x].h = 0;
-	if (main_algo(map_node, start, end, star))
-		return (1);
-	return (0);
+	if (!main_algo(map_node, start, end, star))
+		return (0);
+	return (1);
 }
 
 /*

@@ -12,6 +12,21 @@
 
 #include "../so_long.h"
 
+void	clean_map(t_node **map_node)
+{
+	t_pos	xy;
+
+	xy.x = 0;
+	xy.y = 0;
+	while (map_node[xy.y] != NULL)
+	{
+		free(map_node[xy.y]);
+		xy.y++;
+	}
+	free(map_node);
+	map_node = NULL;
+}
+
 void	render_init(t_xdata *data)
 {
 	int	width;
@@ -66,7 +81,6 @@ void	destroy_all(t_xdata data)
 	free(data.mlx_ptr);
 }
 
-//make sure to free data.map
 int	main(int argc, char **argv)
 {
 	t_xdata	data;
@@ -89,3 +103,28 @@ int	main(int argc, char **argv)
 	destroy_all(data);
 	return (0);
 }
+
+/*
+* The whole programs works by continuously looping while drawing the map and
+* updating the characters position, for performance reasons it is better to
+* just draw the map once and then simply draw the character as he moves 
+* while replacing the item nodes with empty ones.
+*
+* Here is a step by step of each processes the program goes through
+* 1 - the map is given as argument and parsed through to make sure it is 
+*	correct, the maps have several requirements.
+* 2 - once the map is found to be good, the a star algorithm will check if
+*	there is a proper path to the end.
+* 3 - if the path is good then the window is initialized and the image  
+*	is created, the image is like the board on which the tiles are drawn,
+*	the hooks are also set, these hooks will call a function once a key has
+*	been pressed or the mouse clicked on an element of the window, before
+*	the hooks though i initialize the images that will be drawn to the main
+*	image then draw the map once and the character, then the hooks will draw
+*	just what is needed to draw.
+* 4 - now the game is initialized and you can play, the game exits when the
+*	exit key is pressed or the cross is pressed or the character gets to the
+*	exit when all collectibles have been collected, in order to exit the game
+*	the main game loop is manually stopped, then every element is destroyed and
+*	freed. 
+*/
