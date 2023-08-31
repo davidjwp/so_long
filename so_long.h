@@ -38,6 +38,7 @@ typedef struct s_pos{
 typedef struct s_node{
 	int	visited;
 	int	wall;
+	int	item;
 	int	x;
 	int	y;
 	int	f;
@@ -90,6 +91,9 @@ typedef struct star_s {
 	t_pos	end;
 	t_pos	mapwl;
 	int		distance;
+	int		exit;
+	int		items;
+	int		dt_items;
 }				t_star;
 
 //utils

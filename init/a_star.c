@@ -67,40 +67,40 @@ int	main_algo(t_node **map_node, t_pos start, t_pos end, t_star star)
 		currentnode = find_lowestf(&list);
 		currentnode->visited = TRUE;
 		map_node[currentnode->y][currentnode->x].visited = TRUE;
+		if (map_node[currentnode->y][currentnode->x].item == TRUE)
+			star.items++;
 		if (currentnode->x == end.x && currentnode->y == end.y)
+			star.exit++;
+		if (star.exit && star.items == star.dt_items)
 			return (free_map_list(map_node, star, &list), 1);
 		if (!calc_nodes(map_node, list, currentnode, star))
 			return (free_map_list(map_node, star, &list), 0);
 		del_list(&list);
 	}
-	return (free_map_list(map_node, star, &list), err_msg("no path"), 0);
+	return (free_map_list(map_node, star, &list), err_msg("blocked path"), 0);
 }
 
 t_node	**create_map(char **map, t_node **map_node, t_star star, t_node dflt)
 {
-	t_pos	hw;
-
-	hw.y = 0;
-	hw.x = 0;
 	map_node = (t_node **)malloc(++star.mapwl.y * sizeof(t_node *));
 	if (map_node == NULL)
-		return (map_node);
-	while (map[hw.y] != NULL)
+		return (err_msg("map_node malloc fail"), map_node);
+	while (map[dflt.y] != NULL)
 	{
-		map_node[hw.y] = (t_node *)malloc(++star.mapwl.x * sizeof(t_node));
-		if (map_node[hw.y] == NULL)
+		map_node[dflt.y] = (t_node *)malloc(++star.mapwl.x * sizeof(t_node));
+		if (map_node[dflt.y] == NULL)
 			return (clean_map(map_node), map_node);
-		while (map[hw.y][hw.x] != 0)
+		while (map[dflt.y][dflt.x] != 0)
 		{
-			map_node[hw.y][hw.x] = dflt;
-			map_node[hw.y][hw.x].x = hw.x;
-			map_node[hw.y][hw.x].y = hw.y;
-			if (map[hw.y][hw.x] == '1')
-				map_node[hw.y][hw.x].wall = TRUE;
-			hw.x++;
+			map_node[dflt.y][dflt.x] = dflt;
+			if (map[dflt.y][dflt.x] == '1')
+				map_node[dflt.y][dflt.x].wall = TRUE;
+			else if (map[dflt.y][dflt.x] == 'C')
+				map_node[dflt.y][dflt.x].item = TRUE;
+			dflt.x++;
 		}
-		hw.y++;
-		hw.x = 0;
+		dflt.y++;
+		dflt.x = 0;
 	}
 	return (map_node);
 }
@@ -112,8 +112,8 @@ int	a_star(char **map, t_star star)
 	t_pos	end;
 
 	map_node = NULL;
-	map_node = create_map(map, map_node, star, (t_node){FALSE, FALSE, 0, 0, \
-	INT_MAX, INT_MAX, INT_MAX});
+	map_node = create_map(map, map_node, star, (t_node){FALSE, FALSE, FALSE, 0, \
+	0, INT_MAX, INT_MAX, INT_MAX});
 	if (map_node == NULL)
 		return (err_msg("a_star malloc fail"), 0);
 	start = get_pos(map, 'P');

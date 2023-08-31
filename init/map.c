@@ -62,53 +62,6 @@ int	map_walls(char **map, t_pos pos, int y, int x)
 	return (1);
 }
 */
-
-// pos.y should always be the last line pos.y -1 should always be the line before that, ft_split should always ignore \n
-/*
-int	map_walls(char **map, t_pos pos, int y, int x)
-{
-	int	wall;
-
-	wall = 0;
-	if (pos.x == pos.y)
-		return (err_msg("map is square"), 0);
-	while (map[y] != NULL)
-	{
-		if (y <= 1 || y == pos.y)
-			wall = 0;
-		while (map[y][x] != 0)
-		{
-			if (map[y][x] == '1')
-				wall++;
-			x++;
-		}
-		if (((y == 0 || y == pos.y) && wall != pos.x) || (y == pos.y - 2 && \
-		wall != ((pos.y - 2) * 2)) || x != pos.x)
-			return (err_msg("broken walls"), 0);
-		x = 0;
-		y++;
-	}
-	return (1);
-}
-*/
-
-// int	map_walls(char **map, t_pos pos, int y, int x)
-// {
-// 	while (map[y] != NULL)
-// 	{
-// 		while (map[0][x] == '1')
-// 			x++;
-// 		if (x != pos.x)
-// 			return (err_msg("wrong top wall"), 0);
-// 		x = 0;
-// 		while (map[pos.y - 1][x] == '1')
-// 			x++;
-// 		if (x != pos.x)
-// 			return (err_msg("wrong top wall"), 0);
-// 	}
-// }
-
-
 int	map_walls(char **map, t_pos pos, int y, int x)
 {
 	if (pos.y == pos.x)
@@ -181,7 +134,7 @@ int	map_parse(t_xdata *data, char *file)
 		return (err_msg("map too big"), free(map), \
 		free_split(data->map), close(data->mp.fd), 0);
 	if (!a_star(data->map, (t_star){get_pos(data->map, 'P'), \
-	get_pos(data->map, 'E'), data->win_wl, 0}))
+	get_pos(data->map, 'E'), data->win_wl, 0, 0, 0, data->mp.items}))
 		return (free(map), free_split(data->map), close(data->mp.fd), 0);
 	data->player.pos = get_pos(data->map, 'P');
 	return (free(map), close(data->mp.fd), 1);
