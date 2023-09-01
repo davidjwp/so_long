@@ -35,32 +35,34 @@ void	free_split(char **var)
 	free(var);
 }
 
-int	gnl(int fd, char **str, int i)
+int	gnl(int fd, char **str, int i, int n)
 {
 	char	*buf;
 	char	c;
-	int		n;
 
 	buf = malloc(sizeof(char) * BUFSIZ);
 	if (buf == NULL)
-		return (*str == NULL);
+		return (*str = NULL, 0);
 	n = read(fd, &c, 1);
 	if (n == 0)
-		return (free(buf), *str == NULL);
+		return (free(buf), err_msg("gnl read fail"), *str = NULL, 1);
 	if (c == '\n')
-		return (free(buf), *str == NULL);
+		return (free(buf), err_msg("newline at start"), *str = NULL, 2);
 	if (n)
 		buf[i++] = c;
 	while (n && c != 0)
 	{
 		n = read(fd, &c, 1);
-		if (c == '\n' && buf[i - 2] == '\n')
+		if (c == '\n' && buf[i - 1] == '\n')
 			break ;
 		if (n != 0)
 			buf[i] = c;
 		i++;
 	}
-	return (buf[i - 1] = 0, buf[BUFSIZ - 1] = 0, *str = buf, 1);
+	buf[i - 1] = 0;
+	buf[BUFSIZ - 1] = 0;
+	*str = buf;
+	return (map_shape(str, wall_len(buf), 0, 0), 3);
 }
 
 int	ber_file(char *mapName, char *extension)

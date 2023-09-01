@@ -121,9 +121,9 @@ int	map_parse(t_xdata *data, char *file)
 	data->mp.fd = open(file, 0);
 	if (data->mp.fd < 0)
 		return (err_msg("no fd"), 0);
-	gnl(data->mp.fd, &map, 0);
+	gnl(data->mp.fd, &map, 0, 0);
 	if (map == NULL)
-		return (close(data->mp.fd), err_msg("empty file"), 0);
+		return (close(data->mp.fd), 0);
 	data->map = ft_split(map, '\n');
 	if (data->map == NULL)
 		return (close(data->mp.fd), 0);

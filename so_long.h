@@ -101,7 +101,7 @@ int		map_parse(t_xdata *data, char *file);
 int		ft_strlen(char *str);
 char	**ft_split(char const *s, char c);
 void	free_split(char **var);
-int		gnl(int fd, char **str, int i);
+int		gnl(int fd, char **str, int i, int n);
 int		ber_file(char *mapName, char *extension);
 int		close_window(t_xdata *param);
 int		controls(int keysym, t_xdata *param);
@@ -115,10 +115,15 @@ int		a_star(char **map, t_star star);
 int		empty_list(t_node *list, t_node default_node);
 int		free_map_list(t_node **map_node, t_star star, t_list **list);
 int		add_list(t_list **list, t_node newnode);
+int		wall_len(char *map);
+int		is_map(char c);
+void	map_shape(char **map, int len, int i, int n);
 t_node	*find_lowestf(t_list **list);
 void	del_list(t_list **list);
 void	render_character(int keysym, t_xdata *prm);
 void	err_msg(char *emsg);
 void	clean_map(t_node **map_node);
+
+
 
 #endif

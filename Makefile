@@ -21,7 +21,8 @@ NAME		= so_long
 LIBX		= -L ./minilibx-linux -lmlx -lm -lX11 -lXext
 
 SRCS		= init/map.c utils/utils.c utils/ft_split.c init/init.c\
-			 init/hooks.c init/render.c init/a_star.c init/a_utils.c
+			 init/hooks.c init/render.c init/a_star.c init/a_utils.c\
+			 init/map_check.c
 
 HEADER		= so_long.h
 
