@@ -34,49 +34,24 @@ int	is_map(char c)
 	return (0);
 }
 
-/*check map walls for holes and shape
-int	map_walls(char **map, t_pos pos, int y, int x)
-{
-	int	wall;
-
-	while (map[y] != NULL)
-	{
-		if (y < 2 || y == pos.y)
-			wall = 0;
-		while (map[y][x] != 0)
-		{
-			if (map[y][x] == '1')
-				wall++;
-			x++;
-		}
-		if ((wall != pos.x && (y == 0 || y == pos.y)) || \
-		(x != pos.x || (map[y][x] != '1' && map[y][0] != '1')))
-			return (err_msg("broken walls"), 0);
-		if ((wall != pos.x && (y == 0 || y == pos.y)) || (y == pos.y - 1 && wall == ((pos.y - 2) * 2)) || x != pos.x )
-
-		x = 0;
-		y++;
-	}
-	if (pos.x == pos.y)
-		return (err_msg("map is square"), 0);
-	return (1);
-}
-*/
+/*check for proper walls*/
 int	map_walls(char **map, t_pos pos, int y, int x)
 {
 	if (pos.y == pos.x)
-		return(err_msg("map is square"), 0);
-    while (x < pos.x) {
-        if (map[0][x] != '1' || map[pos.y - 1][x] != '1')
-            return (err_msg("broken walls on top/bottom"), 0);
-        x++;
-    }
-    while (y < pos.y) {
-        if (map[y][0] != '1' || map[y][pos.x - 1] != '1')
-            return (err_msg("broken walls on left/right"), 0);
-        y++;
-    }
-    return (1);
+		return (err_msg("map is square"), 0);
+	while (x < pos.x)
+	{
+		if (map[0][x] != '1' || map[pos.y - 1][x] != '1')
+			return (err_msg("broken walls on top/bottom"), 0);
+		x++;
+	}
+	while (y < pos.y)
+	{
+		if (map[y][0] != '1' || map[y][pos.x - 1] != '1')
+			return (err_msg("broken walls on left/right"), 0);
+		y++;
+	}
+	return (1);
 }
 
 /*check for missing element*/

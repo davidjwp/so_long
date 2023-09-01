@@ -117,13 +117,11 @@ int		free_map_list(t_node **map_node, t_star star, t_list **list);
 int		add_list(t_list **list, t_node newnode);
 int		wall_len(char *map);
 int		is_map(char c);
-void	map_shape(char **map, int len, int i, int n);
+int		map_shape(char **map, int i, int n);
 t_node	*find_lowestf(t_list **list);
 void	del_list(t_list **list);
 void	render_character(int keysym, t_xdata *prm);
 void	err_msg(char *emsg);
 void	clean_map(t_node **map_node);
-
-
 
 #endif

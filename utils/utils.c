@@ -46,14 +46,14 @@ int	gnl(int fd, char **str, int i, int n)
 	n = read(fd, &c, 1);
 	if (n == 0)
 		return (free(buf), err_msg("gnl read fail"), *str = NULL, 1);
-	if (c == '\n')
-		return (free(buf), err_msg("newline at start"), *str = NULL, 2);
+	while (!is_map(c) || c == '\n')
+		n = read(fd, &c, 1);
 	if (n)
 		buf[i++] = c;
 	while (n && c != 0)
 	{
 		n = read(fd, &c, 1);
-		if (c == '\n' && buf[i - 1] == '\n')
+		if (i == BUFSIZ - 1)
 			break ;
 		if (n != 0)
 			buf[i] = c;
@@ -61,8 +61,7 @@ int	gnl(int fd, char **str, int i, int n)
 	}
 	buf[i - 1] = 0;
 	buf[BUFSIZ - 1] = 0;
-	*str = buf;
-	return (map_shape(str, wall_len(buf), 0, 0), 3);
+	return (*str = buf, map_shape(str, 0, 0), free(buf), 3);
 }
 
 int	ber_file(char *mapName, char *extension)
