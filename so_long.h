@@ -96,32 +96,34 @@ typedef struct star_s {
 	int		dt_items;
 }				t_star;
 
-//utils
+//parsing
 int		map_parse(t_xdata *data, char *file);
-int		ft_strlen(char *str);
-char	**ft_split(char const *s, char c);
-void	free_split(char **var);
-int		gnl(int fd, char **str, int i, int n);
 int		ber_file(char *mapName, char *extension);
-int		close_window(t_xdata *param);
-int		controls(int keysym, t_xdata *param);
-int		render(t_xdata *data);
-int		lowest_f(t_node *list, t_pos pos);
-int		lowest_h(t_node *list, t_pos pos, int Flow, int Hlow);
-t_pos	get_pos(char **map, char c);
-void	render_map(t_xdata *data);
-int		render(t_xdata *data);
 int		a_star(char **map, t_star star);
-int		empty_list(t_node *list, t_node default_node);
-int		free_map_list(t_node **map_node, t_star star, t_list **list);
 int		add_list(t_list **list, t_node newnode);
-int		wall_len(char *map);
 int		is_map(char c);
+int		wall_len(char *map);
 int		map_shape(char **map, int i, int n);
 t_node	*find_lowestf(t_list **list);
+t_pos	get_pos(char **map, char c);
 void	del_list(t_list **list);
-void	render_character(int keysym, t_xdata *prm);
+
+//cleanup
+void	free_split(char **var);
+int		close_window(t_xdata *param);
+void	xpm_image_fail(t_xdata *data);
+int		empty_list(t_node *list, t_node default_node);
+void	clean_map(t_node ***map_node);
+int		free_map_list(t_node **map_node, t_star star, t_list **list);
+
+//utils
+int		ft_strlen(char *str);
+char	**ft_split(char *s, char c);
+int		gnl(int fd, char **str, int i, int n);
 void	err_msg(char *emsg);
-void	clean_map(t_node **map_node);
+
+//game
+int		controls(int keysym, t_xdata *param);
+void	render_map(t_xdata *data);
 
 #endif

@@ -59,7 +59,8 @@ int	main_algo(t_node **map_node, t_pos start, t_pos end, t_star star)
 
 	list = NULL;
 	if (!add_list(&list, map_node[start.y][start.x]))
-		return (err_msg("a_star add_list malloc fail"), 0);
+		return (free_map_list(map_node, star, &list), \
+		err_msg("a_star add_list malloc fail"), 0);
 	while (list != NULL)
 	{
 		if (list == NULL)
@@ -89,7 +90,7 @@ t_node	**create_map(char **map, t_node **map_node, t_star star, t_node dflt)
 	{
 		map_node[dflt.y] = (t_node *)malloc(++star.mapwl.x * sizeof(t_node));
 		if (map_node[dflt.y] == NULL)
-			return (clean_map(map_node), map_node);
+			return (map_node[dflt.y] = NULL, clean_map(&map_node), map_node);
 		while (map[dflt.y][dflt.x] != 0)
 		{
 			map_node[dflt.y][dflt.x] = dflt;

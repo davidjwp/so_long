@@ -12,19 +12,19 @@
 
 #include "../so_long.h"
 
-void	clean_map(t_node **map_node)
+void	clean_map(t_node ***map_node)
 {
-	t_pos	xy;
+	int	i;
 
-	xy.x = 0;
-	xy.y = 0;
-	while (map_node[xy.y] != NULL)
+	i = 0;
+	while ((*map_node)[i] != NULL)
 	{
-		free(map_node[xy.y]);
-		xy.y++;
+		free((*map_node)[i]);
+		i++;
 	}
-	free(map_node);
-	map_node = NULL;
+	free(*map_node);
+	*map_node = NULL;
+	err_msg("m node fail");
 }
 
 void	render_init(t_xdata *data)
@@ -48,37 +48,44 @@ void	render_init(t_xdata *data)
 	"init/xpm/right.xpm", &width, &height);
 	data->player.left = mlx_xpm_file_to_image(data->mlx_ptr, \
 	"init/xpm/left.xpm", &width, &height);
+	xpm_image_fail(data);
 }
 
-void	init_hooks(t_xdata *data)
+void	destroy_all(t_xdata data)
+{
+	if (data.img_ptr != NULL)
+	{
+		mlx_destroy_image(data.mlx_ptr, data.background);
+		mlx_destroy_image(data.mlx_ptr, data.player.down);
+		mlx_destroy_image(data.mlx_ptr, data.player.up);
+		mlx_destroy_image(data.mlx_ptr, data.player.left);
+		mlx_destroy_image(data.mlx_ptr, data.player.right);
+		mlx_destroy_image(data.mlx_ptr, data.exit);
+		mlx_destroy_image(data.mlx_ptr, data.item);
+		mlx_destroy_image(data.mlx_ptr, data.wall);
+		mlx_destroy_image(data.mlx_ptr, data.img_ptr);
+	}
+	mlx_destroy_window(data.mlx_ptr, data.win_ptr);
+	mlx_destroy_display(data.mlx_ptr);
+	free_split(data.map);
+	free(data.mlx_ptr);
+}
+
+int	init_hooks(t_xdata *data)
 {
 	data->player.steps = 0;
 	data->player.items = 0;
 	data->player.pos.y *= S_BIT;
 	data->player.pos.x *= S_BIT;
 	render_init(data);
+	if (data->img_ptr == NULL)
+		return (destroy_all(*data), err_msg("render_init fail"), 0);
 	render_map(data);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, \
 	data->player.down, data->player.pos.x, data->player.pos.y);
 	mlx_hook(data->win_ptr, DestroyNotify, 0L, &close_window, data);
 	mlx_hook(data->win_ptr, KeyRelease, KeyReleaseMask, &controls, data);
-}
-
-void	destroy_all(t_xdata data)
-{
-	mlx_destroy_image(data.mlx_ptr, data.background);
-	mlx_destroy_image(data.mlx_ptr, data.player.down);
-	mlx_destroy_image(data.mlx_ptr, data.player.up);
-	mlx_destroy_image(data.mlx_ptr, data.player.left);
-	mlx_destroy_image(data.mlx_ptr, data.player.right);
-	mlx_destroy_image(data.mlx_ptr, data.exit);
-	mlx_destroy_image(data.mlx_ptr, data.item);
-	mlx_destroy_image(data.mlx_ptr, data.wall);
-	mlx_destroy_image(data.mlx_ptr, data.img_ptr);
-	mlx_destroy_window(data.mlx_ptr, data.win_ptr);
-	mlx_destroy_display(data.mlx_ptr);
-	free_split(data.map);
-	free(data.mlx_ptr);
+	return (1);
 }
 
 int	main(int argc, char **argv)
@@ -91,14 +98,16 @@ int	main(int argc, char **argv)
 		return (0);
 	data.mlx_ptr = mlx_init();
 	if (data.mlx_ptr == NULL)
-		return (err_msg("mlx_init failed"), 0);
+		return (err_msg("mlx_init failed"), free_split(data.map), 0);
 	data.win_ptr = mlx_new_window(data.mlx_ptr, data.win_wl.x * S_BIT, \
 	data.win_wl.y * S_BIT, "new_window");
 	if (data.win_ptr == NULL)
-		return (free(data.win_ptr), err_msg("Error new window"), 0);
+		return (free(data.win_ptr), err_msg("Error new window"), \
+		free(data.mlx_ptr), free_split(data.map), 0);
 	data.img_ptr = mlx_new_image(data.mlx_ptr, data.win_wl.y * S_BIT, \
 	data.win_wl.x * S_BIT);
-	init_hooks(&data);
+	if (!init_hooks(&data))
+		return (0);
 	mlx_loop(data.mlx_ptr);
 	destroy_all(data);
 	return (0);

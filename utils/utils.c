@@ -44,7 +44,7 @@ int	gnl(int fd, char **str, int i, int n)
 	if (buf == NULL)
 		return (*str = NULL, 0);
 	n = read(fd, &c, 1);
-	if (n == 0)
+	if (n == 0 || n == -1)
 		return (free(buf), err_msg("gnl read fail"), *str = NULL, 1);
 	while (!is_map(c) || c == '\n')
 		n = read(fd, &c, 1);

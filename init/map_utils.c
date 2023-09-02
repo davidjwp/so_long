@@ -12,6 +12,46 @@
 
 #include "../so_long.h"
 
+void	null_ptr(t_xdata *data)
+{
+	data->background = NULL;
+	data->img_ptr = NULL;
+	data->item = NULL;
+	data->player.down = NULL;
+	data->player.up = NULL;
+	data->player.left = NULL;
+	data->player.right = NULL;
+	data->exit = NULL;
+}
+
+void	xpm_image_fail(t_xdata *data)
+{
+	if (data->background == NULL || data->wall == NULL || data->exit == NULL \
+	|| data->item == NULL || data->player.up == NULL || data->player.down == \
+	NULL || data->player.right == NULL || data->player.left == NULL)
+	{
+		if (data->background != NULL)
+			mlx_destroy_image(data->mlx_ptr, data->background);
+		if (data->wall != NULL)
+			mlx_destroy_image(data->mlx_ptr, data->wall);
+		if (data->exit != NULL)
+			mlx_destroy_image(data->mlx_ptr, data->exit);
+		if (data->item != NULL)
+			mlx_destroy_image(data->mlx_ptr, data->item);
+		if (data->player.up != NULL)
+			mlx_destroy_image(data->mlx_ptr, data->player.up);
+		if (data->player.down != NULL)
+			mlx_destroy_image(data->mlx_ptr, data->player.down);
+		if (data->player.left != NULL)
+			mlx_destroy_image(data->mlx_ptr, data->player.left);
+		if (data->player.right != NULL)
+			mlx_destroy_image(data->mlx_ptr, data->player.right);
+		if (data->img_ptr != NULL)
+			mlx_destroy_image(data->mlx_ptr, data->img_ptr);
+		null_ptr(data);
+	}
+}
+
 int	wall_len(char *map)
 {
 	int	i;

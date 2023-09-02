@@ -26,24 +26,28 @@ SRCS		= init/map.c utils/utils.c utils/ft_split.c init/init.c\
 
 HEADER		= so_long.h
 
+MIN_LIBX	= ./minilibx-linux/ibmlx_Linux.a ./minilibx-linux/libmlx.a
+
 OBJS		= $(SRCS:.c=.o)
 
 all:$(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(MIN_LIBX) $(OBJS) 
 	$(CC) $(CFLAGS) $(OBJS) $(LIBX) -o $(NAME)
 
 %.o: %.c $(HEADER)
 	$(CC) -c $(CFLAGS) $(INCLUDE) $< -o $@
 
-dclean: clean
-	rm -f $(DEBUG_OBJS)
+$(MIN_LIBX): 
+	make -C minilibx-linux
 
 clean:
 	rm -f $(OBJS)
+	make -C minilibx-linux clean
 
 fclean: clean
 	rm -f $(NAME)
+	make -C minilibx-linux clean
 
 re: fclean all
 

@@ -52,7 +52,7 @@ static int	ft_word_count(char const *s, char c)
 	return (word_count);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char *s, char c)
 {
 	char	**split;
 	int		index;
@@ -62,7 +62,7 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	split = (char **)malloc(sizeof (char *) * (ft_word_count(s, c) + 1));
 	if (split == NULL)
-		return (err_msg("split malloc fail"), NULL);
+		return (err_msg("split malloc fail"), free(s), NULL);
 	while (*s)
 	{
 		if (*s == 10 && !s[1])
@@ -72,7 +72,7 @@ char	**ft_split(char const *s, char c)
 		if (*s)
 			split[index] = ft_word_cpy(s, c);
 		if (split[index] == ERROR_FT_CPY)
-			return (free_split(split), NULL);
+			return (split[index] = NULL, free(s), free_split(split), NULL);
 		index++;
 		while (*s != c && *s)
 			s++;
