@@ -35,14 +35,14 @@ int	map_clean(char **map, int i, int n)
 		return (err_msg("no player"), free(mapcpy), 0);
 	while ((map[0][i] != '\n' || map[0][i - 1] != '\n') && (*map != NULL && i))
 		i--;
-	while (((map[0][i] != '\n' || map[0][i + 1] != '\n') && map[0][i] && \
-	*map != NULL) && is_map(map[0][i]))
+	while ((((map[0][i] != '\n' || map[0][i + 1] != '\n') && (map[0][i] != '\n' \
+	|| map[0][i + 1] != 0)) && map[0][i] && *map != NULL))
 	{
 		if (map[0][i] == '\n' && !n)
 			i++;
 		mapcpy[n] = map[0][i];
-		i++;
 		n++;
+		i++;
 	}
 	mapcpy[n] = 0;
 	*map = mapcpy;
@@ -58,18 +58,17 @@ int	map_shape(char **map, int i, int n)
 	flen = wall_len(*map);
 	while (map[0][i] != 0)
 	{
-		if (map[0][i] == '\n' && n != flen)
-		{
-			free(*map);
-			*map = NULL;
-		}
-		if (*map == NULL)
-			break ;
 		if (map[0][i] != '\n')
 			n++;
 		else
 			n = 0;
 		i++;
+		if ((map[0][i] == '\n' || !map[0][i]) && n != flen)
+		{
+			free(*map);
+			*map = NULL;
+			break ;
+		}
 	}
 	if (*map == NULL)
 		return (err_msg("bad map shape"), 0);
